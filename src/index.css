@@ -1,0 +1,111 @@
+@import url('/src/app/_ezs/plugins/react-select/react-select.css');
+@import url('/src/app/_ezs/plugins/react-datepicker/react-datepicker.css');
+@import url('/src/app/_ezs/plugins/react-toastify/ReactToastify.css');
+@import url('/src/app/_ezs/plugins/sweetalert2/sweetalert.css');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+:root {
+    --ezs-body-bg: #f5f8fa;
+    --ezs-body-color: #181C32;
+    --ezs-element-bg: #fff;
+}
+
+html.dark {
+    --ezs-body-bg: #151521;
+    --ezs-body-color: #FFFFFF;
+    --ezs-element-bg: #1b1b29;
+}
+
+html,
+body {
+    height: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: var(--ezs-body-color);
+    font-size: 16px;
+}
+
+#root {
+    height: 100%;
+    background: #fff;
+    overflow: auto;
+}
+
+[tabindex],
+*:focus-visible {
+    outline: none;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px white inset !important;
+}
+
+input[type="time"]::-webkit-calendar-picker-indicator {
+    background: none;
+}
+
+
+/* ** */
+
+.fullcalendar-grow .fc {
+    @apply grow p-5
+}
+
+.fc .fc-datagrid-cell-cushion {
+    @apply h-full flex items-center font-bold p-4
+}
+
+.fc .fc-timeline-slot-cushion {
+    @apply pointer-events-none
+}
+
+
+/* .fc .fc-scroller-liquid-absolute {
+    padding-bottom: var(--width-scroll);
+} */
+
+.fc .fc-view-harness {
+    @apply bg-white
+}
+
+.fc-datagrid-cell.fc-resource .fc-datagrid-cell-frame {
+    @apply !min-h-[111px]
+}
+
+.fc .fc-event-main {
+    flex-grow: initial;
+    @apply h-full w-full
+}
+
+.fc-event:focus::after {
+    @apply hidden
+}
+
+.fc-event:focus {
+    @apply shadow-none
+}
+
+.fc-datagrid-cell-main {
+    @apply break-normal
+}
+
+.fc-event-today {
+    @apply !bg-[#fac4ca] relative
+}
+
+.fc-event-today::before {
+    @apply absolute w-full h-[10px] top-full left-0 bg-[#fac4ca] content-['']
+}
+
+.fc-day-today .fc-timeline-slot-frame {
+    @apply text-danger
+}
+
+
+/* .fc .fc-timeline-event-harness {
+    @apply h-full
+} */
