@@ -47,7 +47,7 @@ export const formatArray = {
   sumTotal: (array, key) => array.reduce((a, b) => a + (b[key] || 0), 0),
   sumTotalNested: ({ Items, key, name }) => {
     let total = 0;
-    
+
     for (let item of Items) {
       if (item.Title && item.Title === key) {
         if (typeof item["Value"] !== "undefined") {

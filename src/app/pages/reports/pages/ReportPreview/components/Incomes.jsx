@@ -52,15 +52,17 @@ function Incomes({ filters }) {
                 ...group,
                 Title: group.GroupTitle,
                 Keys: group.Keys
-                  ? group.Keys.map((key) => ({
-                      ...key,
-                      Title: key.Key,
-                      Value: {
-                        Count: formatArray.sumTotal(key.Values, "Count"),
-                        Qty: formatArray.sumTotal(key.Values, "Qty"),
-                        Value: formatArray.sumTotal(key.Values, "Value"),
-                      },
-                    }))
+                  ? group.Keys.map((key) => {
+                      return {
+                        ...key,
+                        Title: key.Key,
+                        Value: {
+                          Count: formatArray.sumTotal(key.Values, "Count"),
+                          Qty: formatArray.sumTotal(key.Values, "Qty"),
+                          Value: formatArray.sumTotal(key.Values, "Value"),
+                        },
+                      };
+                    })
                   : [],
               }))
             : [],
@@ -259,7 +261,7 @@ function Incomes({ filters }) {
       )}
       {!isLoading && (
         <div>
-          {data.totalGroups.map((item, index) => (
+          {data?.totalGroups.map((item, index) => (
             <div
               className="pb-4 mb-4 border-b last:pb-0 last:mb-0 last:border-0"
               key={index}

@@ -377,7 +377,10 @@ function Customers({ filters }) {
                     }}
                   >
                     {({ open }) => (
-                      <div className="flex justify-between mb-6 cursor-pointer" onClick={open}>
+                      <div
+                        className="flex justify-between mb-6 cursor-pointer"
+                        onClick={open}
+                      >
                         <div className="flex items-center">
                           <div
                             className={clsx(
@@ -395,9 +398,7 @@ function Customers({ filters }) {
                           </div>
                           <div className="pl-3 text-[#2a3547]">
                             <div className="font-semibold text-[15px] md:text-base">
-                              {item.GroupTitle === "Khách phát sinh giao dịch"
-                                ? "Khách có giao dịch"
-                                : item.GroupTitle}
+                              {item.GroupTitle}
                             </div>
                             <div className="text-sm font-light">
                               Tổng khách hàng
