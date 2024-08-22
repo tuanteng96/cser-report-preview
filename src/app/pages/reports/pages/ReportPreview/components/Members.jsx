@@ -304,18 +304,19 @@ function Members({ filters }) {
                         </div>
                       </div>
                     </div>
-                    {item.GroupTitle !== "Tiền tour / HH / DS" && (
-                      <div
-                        className={clsx(
-                          "min-w-10 h-10 flex items-center justify-center rounded font-medium text-[15px] px-2",
-                          index === 0 && "bg-[#ecf2ff] text-primary",
-                          index === 1 && "bg-[#EEE5FF] text-info",
-                          index === 2 && "bg-[#F3F6F9] text-success"
-                        )}
-                      >
-                        +{formatString.formatVNDPositive(item.GroupValue)}
-                      </div>
-                    )}
+                    {item.GroupTitle !== "Tiền tour / HH / DS" &&
+                      item.GroupTitle !== "Thưởng phạt" && (
+                        <div
+                          className={clsx(
+                            "min-w-10 h-10 flex items-center justify-center rounded font-medium text-[15px] px-2",
+                            index === 0 && "bg-[#ecf2ff] text-primary",
+                            index === 1 && "bg-[#EEE5FF] text-info",
+                            index === 2 && "bg-[#F3F6F9] text-success"
+                          )}
+                        >
+                          +{formatString.formatVNDPositive(item.GroupValue)}
+                        </div>
+                      )}
                   </div>
                 )}
               </PickerViews>

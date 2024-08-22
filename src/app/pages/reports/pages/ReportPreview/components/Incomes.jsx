@@ -279,7 +279,10 @@ function Incomes({ filters }) {
               >
                 {({ open }) => (
                   <div
-                    className="flex justify-between mb-6 cursor-pointer"
+                    className={clsx(
+                      "flex justify-between cursor-pointer",
+                      item.GroupTitle !== "Tồn ngày" && "mb-6"
+                    )}
                     onClick={open}
                   >
                     <div className="flex items-center">
@@ -313,40 +316,41 @@ function Incomes({ filters }) {
                   </div>
                 )}
               </PickerViews>
-
-              <div>
-                {item.Keys.map((key, i) => (
-                  <PickerViews
-                    key={i}
-                    group={item}
-                    item={key}
-                    api={{
-                      path: "/api/v3/r23/hang-ngay/danh-sach#thu-chi",
-                      filter: {
-                        ...filters,
-                        GroupTitle: item.GroupTitle,
-                        Key: key.Key,
-                        Type: "thu-chi",
-                      },
-                    }}
-                  >
-                    {({ open }) => (
-                      <div
-                        className="cursor-pointer flex justify-between text-[15px] leading-6 border-b border-dashed pb-2 mb-2 last:border-0 last:pb-0 last:mb-0"
-                        onClick={open}
-                      >
-                        <div className="flex items-center">
-                          <div className="w-2.5 h-2.5 rounded-sm bg-gray-300"></div>
-                          <div className="pl-2 font-light">{key.Key}</div>
+              {item.GroupTitle !== "Tồn ngày" && (
+                <div>
+                  {item.Keys.map((key, i) => (
+                    <PickerViews
+                      key={i}
+                      group={item}
+                      item={key}
+                      api={{
+                        path: "/api/v3/r23/hang-ngay/danh-sach#thu-chi",
+                        filter: {
+                          ...filters,
+                          GroupTitle: item.GroupTitle,
+                          Key: key.Key,
+                          Type: "thu-chi",
+                        },
+                      }}
+                    >
+                      {({ open }) => (
+                        <div
+                          className="cursor-pointer flex justify-between text-[15px] leading-6 border-b border-dashed pb-2 mb-2 last:border-0 last:pb-0 last:mb-0"
+                          onClick={open}
+                        >
+                          <div className="flex items-center">
+                            <div className="w-2.5 h-2.5 rounded-sm bg-gray-300"></div>
+                            <div className="pl-2 font-light">{key.Key}</div>
+                          </div>
+                          <div className="font-semibold text-center min-w-10 text-[14px]">
+                            {formatString.formatVNDPositive(key.Value.Value)}
+                          </div>
                         </div>
-                        <div className="font-semibold text-center min-w-10 text-[14px]">
-                          {formatString.formatVNDPositive(key.Value.Value)}
-                        </div>
-                      </div>
-                    )}
-                  </PickerViews>
-                ))}
-              </div>
+                      )}
+                    </PickerViews>
+                  ))}
+                </div>
+              )}
             </div>
           ))}
         </div>
