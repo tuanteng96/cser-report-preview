@@ -449,7 +449,9 @@ function Sells({ filters }) {
                     {({ open }) => (
                       <div
                         className="flex justify-between mb-6 cursor-pointer"
-                        onClick={open}
+                        onClick={() =>
+                          item.GroupTitle !== "Đơn hàng mới" && open()
+                        }
                       >
                         <div className="flex items-center">
                           <div
@@ -506,7 +508,9 @@ function Sells({ filters }) {
                       >
                         {({ open }) => (
                           <div
-                            onClick={open}
+                            onClick={() =>
+                              item.GroupTitle !== "Đơn hàng mới" && open()
+                            }
                             className="cursor-pointer flex justify-between text-[15px] leading-6 border-b border-dashed pb-2 mb-2 last:border-0 last:pb-0 last:mb-0"
                           >
                             <div className="flex items-center">
