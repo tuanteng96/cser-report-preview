@@ -449,9 +449,7 @@ function Sells({ filters }) {
                     {({ open }) => (
                       <div
                         className="flex justify-between mb-6 cursor-pointer"
-                        onClick={() =>
-                          item.GroupTitle !== "Đơn hàng mới" && open()
-                        }
+                        onClick={open}
                       >
                         <div className="flex items-center">
                           <div
