@@ -10,6 +10,28 @@ import http from "src/app/_ezs/utils/http";
 import ReactBaseTable from "src/app/_ezs/partials/table";
 import { formatString } from "src/app/_ezs/utils/formatString";
 
+const getWidth = (name) => {
+  if(["ID khách", "Giới tính", "ID Đơn", "ID khách", "ID SP/DV", "SL"].includes(name)) {
+    return 110
+  }
+  if(["Điện thoại", "Ngày Sinh", "Ngày Tạo", "NGày", "SĐT", "Đánh giá sao"].includes(name)) {
+    return 150
+  }
+  if(["Nguyên giá", "Tăng / giảm", "Tổng tiền", "Còn lại", "Giảm giá cả đơn", "Cần Thanh toán", "Khấu trừ trả hàng", "Tổng thanh toán", "Còn nợ", "TM,CK,QT", "Ví", "Thẻ Tiền", "Tổng Giá bán", "Giá buổi", "Phụ phí", "Tổng lương"].includes(name)) {
+    return 160
+  }
+  if(["Voucher", "Trạng thái", "Loại"].includes(name)) {
+    return 200
+  }
+  if(["Địa chỉ", "Ghi chú", "Tên"].includes(name)) {
+    return 300
+  }
+  if(["Chi tiết đơn", "Tổng Đã thanh toán ( TM,CK,QT, VI, TT )"].includes(name)) {
+    return 400
+  }
+  return 250
+}
+
 function PickerViews({ children, group, item, api }) {
   let [visible, setVisible] = useState(false);
   const { report, bao_cao_ngay_tong_quan } = useRoles([
@@ -61,14 +83,14 @@ function PickerViews({ children, group, item, api }) {
             key: key,
             title: key,
             dataKey: key,
-            width: 250,
+            width: getWidth(key),
             sortable: false,
           };
-          if (key.includes("Date")) {
+          if (['Ngày Sinh', 'Ngày Tạo', "NGày"].includes(key)) {
             obj["cellRenderer"] = ({ rowData }) =>
               rowData[key] ? moment(rowData[key]).format("DD-MM-YYYY") : "";
           }
-          if (["Pay", "TM", "CK", "QT", "The_tien", "Vi", "Con_no", "DVPP"].some((x) => key.includes(x))) {
+          if (["Nguyên giá", "Tăng / giảm", "Tổng tiền", "Còn lại", "Giảm giá cả đơn", "Cần Thanh toán", "Khấu trừ trả hàng", "Tổng thanh toán", "Còn nợ", "TM,CK,QT", "Ví", "Thẻ Tiền","Tổng Giá bán", "Tổng Đã thanh toán ( TM,CK,QT, VI, TT )", "Giá buổi", "Tổng lương", "Phụ phí"].includes(key)) {
             obj["cellRenderer"] = ({ rowData }) => formatString.formatVNDPositive(rowData[key]);
           }
           clms.push(obj);
