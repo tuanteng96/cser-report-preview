@@ -155,6 +155,7 @@ function Customers({ filters }) {
         totalGroups: [],
         categories: [],
       };
+      
       if (data?.result?.Items) {
         let newItems = data.result.Items;
         newResult.data = newItems.map((item) => ({
@@ -252,6 +253,7 @@ function Customers({ filters }) {
             : Stocks.map((x) => x.ID),
       };
       let { data } = await ReportsAPI.customers(newFilters);
+      
       let newResult = {
         data: null,
         totalGroups: [],
@@ -360,7 +362,7 @@ function Customers({ filters }) {
         <div ref={elRef}>
           {!isLoading && (
             <>
-              {data.totalGroups.map((item, index) => (
+              {data?.totalGroups.map((item, index) => (
                 <div
                   className="pb-4 mb-4 border-b last:pb-0 last:mb-0 last:border-0"
                   key={index}

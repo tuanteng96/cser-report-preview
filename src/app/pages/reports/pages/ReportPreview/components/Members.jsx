@@ -259,7 +259,7 @@ function Members({ filters }) {
       )}
       {!isLoading && (
         <div>
-          {data.totalGroups.map((item, index) => (
+          {data?.totalGroups.map((item, index) => (
             <div
               className="pb-4 mb-4 border-b last:pb-0 last:mb-0 last:border-0"
               key={index}

@@ -110,6 +110,9 @@ function Sells({ filters }) {
   const { isLoading, data } = useQuery({
     queryKey: ["ReportsSells", filters],
     queryFn: async () => {
+      let Stocks = bao_cao_ngay_tong_quan?.hasRight
+        ? bao_cao_ngay_tong_quan?.StockRoles
+        : report.StockRoles;
       let newFilters = {
         ...filters,
         Type: "ban-hang",
@@ -126,7 +129,6 @@ function Sells({ filters }) {
       };
 
       let { data } = await ReportsAPI.sells(newFilters);
-
       let newResult = {
         data: null,
         totalGroups: [],
@@ -232,6 +234,7 @@ function Sells({ filters }) {
       };
 
       let { data } = await ReportsAPI.orders(newFilters);
+      
       let arrayTimeList = arrayTime();
 
       if (
@@ -275,9 +278,12 @@ function Sells({ filters }) {
         name: "Tổng",
         data: arrayTimeList.map((x) => x.Items.length),
       });
+      
       result.seriesDs.push({
         name: "Tổng doanh số",
-        data: arrayTimeList.map((x) => formatArray.sumTotal(x.Items, "ToPay")),
+        data: arrayTimeList.map((x) =>
+          formatArray.sumTotal(x.Items, "Tổng tiền")
+        ),
       });
       return result;
     },
@@ -430,7 +436,7 @@ function Sells({ filters }) {
           )}
           {!isLoading && (
             <>
-              {data.totalGroups.map((item, index) => (
+              {data?.totalGroups?.map((item, index) => (
                 <div
                   className="pb-4 mb-4 border-b last:pb-0 last:mb-0 last:border-0"
                   key={index}
