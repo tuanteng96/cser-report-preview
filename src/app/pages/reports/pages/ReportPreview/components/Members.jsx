@@ -121,7 +121,7 @@ function Members({ filters }) {
 
   return (
     <div className="col-span-2 p-6 rounded shadow-xxl">
-      <div className="mb-6 text-xl font-semibold">Nhiên viên</div>
+      <div className="mb-6 text-xl font-semibold">Nhân viên</div>
       {isLoading && (
         <div>
           <div className="pb-4 mb-4 border-b last:pb-0 last:mb-0 last:border-0">
