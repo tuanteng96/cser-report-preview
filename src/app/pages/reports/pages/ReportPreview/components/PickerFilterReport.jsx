@@ -28,8 +28,7 @@ function PickerFilterReport({ children, data, onSubmits }) {
     defaultValues: {
       Type: "",
       StockID: CrStocks?.ID ? [CrStocks?.ID] : null,
-      DateStart: moment().clone().startOf("week").toDate(),
-      DateEnd: moment().clone().endOf("week").toDate(),
+      CrDate: moment().toDate(),
     },
   });
 
@@ -89,10 +88,10 @@ function PickerFilterReport({ children, data, onSubmits }) {
                       </Dialog.Title>
                       <div className="p-5 overflow-auto grow">
                         <div className="mb-3.5">
-                          <div className="font-light">Từ ngày</div>
+                          <div className="font-light">Ngày</div>
                           <div className="mt-1">
                             <Controller
-                              name="DateStart"
+                              name="CrDate"
                               control={control}
                               render={({
                                 field: { ref, ...field },
@@ -101,30 +100,6 @@ function PickerFilterReport({ children, data, onSubmits }) {
                                 <InputDatePicker
                                   //popperPlacement='top-start'
                                   placeholderText="Từ ngày"
-                                  autoComplete="off"
-                                  onChange={field.onChange}
-                                  selected={
-                                    field.value ? new Date(field.value) : null
-                                  }
-                                  dateFormat="dd/MM/yyyy"
-                                />
-                              )}
-                            />
-                          </div>
-                        </div>
-                        <div className="mb-3.5">
-                          <div className="font-light">Đến ngày</div>
-                          <div className="mt-1">
-                            <Controller
-                              name="DateEnd"
-                              control={control}
-                              render={({
-                                field: { ref, ...field },
-                                fieldState,
-                              }) => (
-                                <InputDatePicker
-                                  //popperPlacement='top-start'
-                                  placeholderText="Đến ngày"
                                   autoComplete="off"
                                   onChange={field.onChange}
                                   selected={

@@ -38,6 +38,8 @@ const getWidth = (name) => {
       "ID đơn hàng",
       "Tại:(nhà/spa)",
       "Ngày",
+      "Giờ checkin", 
+      "Giờ checkout"
     ].includes(name)
   ) {
     return 150;
@@ -147,7 +149,7 @@ function PickerViews({ children, group, item, api }) {
               "Ngày Tạo",
               "NGày",
               "Ngày tạo đặt lịch",
-              "Ngày",
+              "Ngày"
             ].includes(key)
           ) {
             obj["cellRenderer"] = ({ rowData }) =>
@@ -157,6 +159,12 @@ function PickerViews({ children, group, item, api }) {
             obj["cellRenderer"] = ({ rowData }) =>
               rowData[key]
                 ? moment(rowData[key]).format("DD-MM-YYYY HH:mm")
+                : "";
+          }
+          if (["Giờ checkin", "Giờ checkout"].includes(key)) {
+            obj["cellRenderer"] = ({ rowData }) =>
+              rowData[key]
+                ? moment(rowData[key]).format("HH:mm")
                 : "";
           }
           if (
@@ -181,6 +189,8 @@ function PickerViews({ children, group, item, api }) {
               "Tiền mặt",
               "Chuyển khoản",
               "Quẹt thẻ",
+              "Giá trị",
+              "Số tiền"
             ].includes(key)
           ) {
             obj["cellRenderer"] = ({ rowData }) =>
@@ -280,7 +290,7 @@ function PickerViews({ children, group, item, api }) {
                   >
                     <Dialog.Panel
                       tabIndex={0}
-                      className="flex flex-col w-full h-full bg-white rounded shadow-lg relative"
+                      className="relative flex flex-col w-full h-full bg-white rounded shadow-lg"
                     >
                       <Dialog.Title className="relative flex justify-between px-5 py-4 border-b md:py-5 border-light">
                         <div className="text-lg font-bold md:text-2xl">
@@ -299,12 +309,12 @@ function PickerViews({ children, group, item, api }) {
                         height="h-[calc(100%-61px)]"
                         loading={isLoading}
                       />
-                      <div className="grow p-4 overflow-auto">
+                      <div className="p-4 overflow-auto grow">
                         {data &&
                           data.length > 0 &&
                           data.map((row, index) => (
                             <div
-                              className="border rounded mb-4 last:mb-0 shadow-xxl"
+                              className="mb-4 border rounded last:mb-0 shadow-xxl"
                               key={index}
                             >
                               {columns &&
@@ -314,7 +324,7 @@ function PickerViews({ children, group, item, api }) {
                                       <div className="p-3 w-[135px] text-[#6c7293] font-light">
                                         {cell.title}
                                       </div>
-                                      <div className="text-right p-3 flex-1 font-semibold">
+                                      <div className="flex-1 p-3 font-semibold text-right">
                                         {typeof cell.cellRenderer !== "function"
                                           ? row[cell.dataKey]
                                           : cell.cellRenderer({
@@ -337,7 +347,7 @@ function PickerViews({ children, group, item, api }) {
                                       <div className="p-3 w-[135px] text-[#6c7293] font-light">
                                         ... + {columns.length - 4}
                                       </div>
-                                      <div className="text-right px-3 flex-1 flex justify-end items-center">
+                                      <div className="flex items-center justify-end flex-1 px-3 text-right">
                                         <button
                                           className="bg-primary text-white text-[13px] leading-5 px-3 py-1.5 rounded font-light"
                                           type="button"

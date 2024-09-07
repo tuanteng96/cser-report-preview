@@ -88,7 +88,11 @@ function ReportPreview(props) {
         </div>
         <PickerFilterReport
           onSubmits={(values) => {
-            setFilters(values);
+            setFilters((prevState) => ({
+              ...prevState,
+              CrDate: values.CrDate,
+              StockID: values.StockID,
+            }))
           }}
         >
           {({ open }) => (
