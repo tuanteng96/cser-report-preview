@@ -308,7 +308,8 @@ function Services({ filters }) {
                         index === 2 && "bg-[#F3F6F9] text-success"
                       )}
                     >
-                      +{item.GroupValue}
+                      {item.GroupValue >= 0 ? "+" : "-"}
+                      {item.GroupValue}
                     </div>
                   </div>
                 )}

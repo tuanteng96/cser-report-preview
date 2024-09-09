@@ -314,7 +314,8 @@ function Members({ filters }) {
                             index === 2 && "bg-[#F3F6F9] text-success"
                           )}
                         >
-                          +{formatString.formatVNDPositive(item.GroupValue)}
+                          {item.GroupValue >= 0 ? "+" : "-"}
+                          {formatString.formatVNDPositive(item.GroupValue)}
                         </div>
                       )}
                   </div>

@@ -67,7 +67,7 @@ function Incomes({ filters }) {
               }))
             : [],
         }));
-
+        
         for (let group of newResult.data[0].Groups) {
           let newObj = {
             ...group,
@@ -311,7 +311,8 @@ function Incomes({ filters }) {
                         index === 2 && "bg-[#F3F6F9] text-success"
                       )}
                     >
-                      +{formatString.formatVNDPositive(item.GroupValue)}
+                      {item.GroupValue >= 0 ? "+" : "-"}
+                      {formatString.formatVNDPositive(item.GroupValue)}
                     </div>
                   </div>
                 )}
@@ -343,7 +344,7 @@ function Incomes({ filters }) {
                             <div className="pl-2 font-light">{key.Key}</div>
                           </div>
                           <div className="font-semibold text-center min-w-10 text-[14px]">
-                            {formatString.formatVNDPositive(key.Value.Value)}
+                            {formatString.formatVND(key.Value.Value)}
                           </div>
                         </div>
                       )}

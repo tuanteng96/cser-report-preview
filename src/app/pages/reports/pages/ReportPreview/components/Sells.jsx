@@ -234,7 +234,7 @@ function Sells({ filters }) {
       };
 
       let { data } = await ReportsAPI.orders(newFilters);
-      
+
       let arrayTimeList = arrayTime();
 
       if (
@@ -278,7 +278,7 @@ function Sells({ filters }) {
         name: "Tổng",
         data: arrayTimeList.map((x) => x.Items.length),
       });
-      
+
       result.seriesDs.push({
         name: "Tổng doanh số",
         data: arrayTimeList.map((x) =>
@@ -489,7 +489,8 @@ function Sells({ filters }) {
                             index === 2 && "bg-[#F3F6F9] text-success"
                           )}
                         >
-                          +{formatString.formatVNDPositive(item.GroupValue)}
+                          {item.GroupValue >= 0 ? "+" : "-"}
+                          {formatString.formatVNDPositive(item.GroupValue)}
                         </div>
                       </div>
                     )}
@@ -522,7 +523,7 @@ function Sells({ filters }) {
                               <div className="pl-2 font-light">{key.Key}</div>
                             </div>
                             <div className="font-semibold text-center min-w-10 text-[14px]">
-                              {formatString.formatVNDPositive(key.Value.Value)}
+                              {formatString.formatVND(key.Value.Value)}
                             </div>
                           </div>
                         )}

@@ -21,7 +21,7 @@ if (import.meta.env.DEV) {
       },
       {
         Title: "Cser Hà Nội",
-        ID: 11389,
+        ID: 11407,
         ParentID: 778,
       },
       {
@@ -51,7 +51,7 @@ if (import.meta.env.DEV) {
                         stocksList: [
                           {
                             Title: "Cser Hà Nội",
-                            ID: 11389,
+                            ID: 11407,
                           },
                         ],
                       },
@@ -66,7 +66,7 @@ if (import.meta.env.DEV) {
               stocksList: [
                 {
                   Title: "Cser Hà Nội",
-                  ID: 11389,
+                  ID: 11407,
                 },
                 {
                   Title: "Cser Hồ Chí Minh",
@@ -78,7 +78,7 @@ if (import.meta.env.DEV) {
         },
       ],
     },
-    CrStockID: 11389,
+    CrStockID: 11407,
     token:
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBdXRoMlR5cGUiOiJVc2VyRW50IiwiSUQiOiIxIiwiVG9rZW5JZCI6IjEwNjEzMzEwNjI3MiIsIm5iZiI6MTcyNTAwMjg2OCwiZXhwIjoxODExNDAyODY4LCJpYXQiOjE3MjUwMDI4Njh9.kwO1xUM1xziNePzOFCuSSNbFWz6tE2Am19SJHRpffzA",
   };
