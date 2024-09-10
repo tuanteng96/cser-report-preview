@@ -2,8 +2,8 @@ import axios from "axios";
 
 class Http {
   constructor() {
-    this.accessToken = window?.top?.Info?.token || "";
-    this.accessStockID = window?.top?.Info?.CrStockID || "";
+    this.accessToken = window?.Info?.token || "";
+    this.accessStockID = window?.Info?.CrStockID || "";
     this.instance = axios.create({
       baseURL:
         import.meta.env.MODE === "development"

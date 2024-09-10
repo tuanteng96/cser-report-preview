@@ -11,7 +11,7 @@ function ReportsPage(props) {
     "bao_cao_ngay_tong_quan",
     "report",
   ]);
-
+  
   return (
     <>
       <Routes>
@@ -19,8 +19,7 @@ function ReportsPage(props) {
           element={
             <RoleAccess
               roles={
-                bao_cao_ngay_tong_quan?.hasRight ||
-                (report?.hasRight && report?.IsStocks)
+                bao_cao_ngay_tong_quan?.hasRight || (report?.hasRight && report?.IsStocks)
               }
             />
           }

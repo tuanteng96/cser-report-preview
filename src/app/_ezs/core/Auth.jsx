@@ -87,9 +87,9 @@ if (import.meta.env.DEV) {
 const getInfoLocalStorage = () => {
   return new Promise(function (resolve) {
     function getInfo() {
-      if (window.top.Info) {
+      if (window.Info) {
         resolve({
-          Auth: window.top.Info,
+          Auth: window.Info,
         });
       } else {
         setTimeout(() => {
