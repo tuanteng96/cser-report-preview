@@ -26,7 +26,7 @@ function ReportPreview(props) {
 
   const [filters, setFilters] = useState({
     Type: "",
-    StockID: CrStocks?.ID ? [CrStocks?.ID] : null,
+    StockID: (report?.IsStocks || bao_cao_ngay_tong_quan?.IsStocks) ? null : (CrStocks?.ID ? [CrStocks?.ID] : null),
     CrDate: moment().toDate()
     // DateStart: moment().clone().startOf("week").toDate(), //"30/07/2024"
     // DateEnd: moment().clone().endOf("week").toDate(), //"31/07/2024"

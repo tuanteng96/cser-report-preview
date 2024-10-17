@@ -21,12 +21,12 @@ if (import.meta.env.DEV) {
       },
       {
         Title: "Cser Hà Nội",
-        ID: 11407,
+        ID: 11409,
         ParentID: 778,
       },
       {
         Title: "Cser Hồ Chí Minh",
-        ID: 11376,
+        ID: 11410,
         ParentID: 778,
       },
     ],
@@ -36,7 +36,7 @@ if (import.meta.env.DEV) {
           group: "Báo cáo",
           rights: [
             {
-              IsAllStock: false,
+              IsAllStock: true,
               hasRight: true,
               name: "report",
               reports: {
@@ -51,9 +51,15 @@ if (import.meta.env.DEV) {
                         stocksList: [
                           {
                             Title: "Cser Hà Nội",
-                            ID: 11407,
+                            ID: 11409,
                           },
+                          {
+                            Title: "Cser Hồ Chí Minh",
+                            ID: 11410,
+                            ParentID: 778,
+                          }
                         ],
+                        IsAllStock: false,
                       },
                       {
                         stocks: "",
@@ -66,11 +72,11 @@ if (import.meta.env.DEV) {
               stocksList: [
                 {
                   Title: "Cser Hà Nội",
-                  ID: 11407,
+                  ID: 11409,
                 },
                 {
                   Title: "Cser Hồ Chí Minh",
-                  ID: 11376,
+                  ID: 11410,
                 },
               ],
             },
@@ -78,9 +84,9 @@ if (import.meta.env.DEV) {
         },
       ],
     },
-    CrStockID: 11407,
+    CrStockID: 11409,
     token:
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBdXRoMlR5cGUiOiJVc2VyRW50IiwiSUQiOiIxIiwiVG9rZW5JZCI6IjEwNjEzMzEwNjI3MiIsIm5iZiI6MTcyNTAwMjg2OCwiZXhwIjoxODExNDAyODY4LCJpYXQiOjE3MjUwMDI4Njh9.kwO1xUM1xziNePzOFCuSSNbFWz6tE2Am19SJHRpffzA",
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBdXRoMlR5cGUiOiJVc2VyRW50IiwiSUQiOiIxIiwiVG9rZW5JZCI6IjEwNjEzMzEwNjUxNiIsIm5iZiI6MTcyODk2MTkzNiwiZXhwIjoxODE1MzYxOTM2LCJpYXQiOjE3Mjg5NjE5MzZ9.PAv6K70ykXm_IN3iu_Vyd0EL5WH2lJ9LLoaYU7KLaJA',
   };
 }
 
