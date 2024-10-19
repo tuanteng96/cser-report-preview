@@ -13,8 +13,7 @@ import { formatString } from "src/app/_ezs/utils/formatString";
 import Chart from "react-apexcharts";
 import { useRoles } from "src/app/_ezs/hooks/useRoles";
 import { PickerViews } from ".";
-
-var heightlegend = 50;
+import PickerViewsSells from "./PickerViewsSells";
 
 function arrayTime() {
   let fromTime = moment("00:00:00", "HH:mm:ss");
@@ -293,91 +292,10 @@ function Sells({ filters }) {
     },
   });
 
-  const { isLoading: isLoadingChart2, data: dataChart2 } = useQuery({
-    queryKey: ["ReportsSellsChart2", filters],
-    queryFn: async () => {
-      let Stocks = bao_cao_ngay_tong_quan?.hasRight
-        ? bao_cao_ngay_tong_quan?.StockRoles
-        : report.StockRoles;
-
-      let newFilters = {
-        ...filters,
-        Type: "ban-hang",
-        DateStart: filters?.CrDate
-          ? moment(filters?.CrDate).format("DD/MM/YYYY")
-          : null,
-        DateEnd: filters?.CrDate
-          ? moment(filters?.CrDate).format("DD/MM/YYYY")
-          : null,
-        BrandIds: "",
-        CategoriesIds: "",
-        IsMember: "",
-        Payment: "",
-        Pi: 1,
-        ProductIds: "",
-        StockID:
-          filters?.StockID && filters?.StockID.length > 0
-            ? filters?.StockID.toString()
-            : Stocks.map((x) => x.ID).toString(),
-        TimeToReal: 1,
-        Voucher: "",
-      };
-
-      let { data } = await ReportsAPI.saleout(newFilters);
-
-      let rs = {
-        SP: {
-          Items: [],
-          labels: [],
-          series: [],
-        },
-        DV: {
-          Items: [],
-          labels: [],
-          series: [],
-        },
-        TT: {
-          Items: [],
-          labels: [],
-          series: [],
-        },
-      };
-
-      if (data.result) {
-        for (let item of data.result) {
-          if (item.Format === 1) {
-            rs["SP"].Items.push(item);
-            rs["SP"].labels.push(item.ProdTitle);
-            rs["SP"].series.push(item.SumTopay);
-          }
-          if (item.Format === 2) {
-            rs["DV"].Items.push(item);
-            rs["DV"].labels.push(item.ProdTitle);
-            rs["DV"].series.push(item.SumTopay);
-          }
-          if (item.Format === 3) {
-            rs["TT"].Items.push(item);
-            rs["TT"].labels.push(item.ProdTitle);
-            rs["TT"].series.push(item.SumTopay);
-          }
-        }
-      }
-
-      rs.TOTAL = {
-        labels: ["Sản phẩm / NVL", "Dịch vụ / Phụ phí", "Thẻ tiền"],
-        series: [
-          formatArray.sumTotal(rs.SP.Items, "SumTopay"),
-          formatArray.sumTotal(rs.DV.Items, "SumTopay"),
-          formatArray.sumTotal(rs.TT.Items, "SumTopay"),
-        ],
-      };
-      return rs;
-    },
-  });
-
   useEffect(() => {
     setHeight(elRef?.current?.clientHeight / 2 + "px");
   }, [elRef, data]);
+
   return (
     <>
       <div className="col-span-2 p-6 rounded shadow-xxl">
@@ -625,85 +543,77 @@ function Sells({ filters }) {
         <div className="flex items-center justify-between mb-5">
           <div className="text-xl font-semibold">Biểu đồ bán hàng</div>
           <div className="flex">
-            <div
-              className={clsx(
-                "items-center block px-5 py-2.5 rounded-l text-[15px] cursor-pointer",
-                Active ? "bg-primary text-white" : "bg-gray-200"
+            <PickerViewsSells filters={filters}>
+              {({ open }) => (
+                <div
+                  className={clsx(
+                    "items-center block px-3 py-2.5 rounded text-[15px] cursor-pointer bg-primary text-white"
+                  )}
+                  onClick={open}
+                >
+                  Xem thêm <span className="hidden md:inline-block">biểu đồ</span>
+                </div>
               )}
-              onClick={() => setActive(true)}
-            >
-              Tổng quan
-            </div>
-            <div
-              className={clsx(
-                "items-center block px-5 py-2.5 rounded-r text-[15px] cursor-pointer",
-                !Active ? "bg-primary text-white" : "bg-gray-200"
-              )}
-              onClick={() => setActive(false)}
-            >
-              Chi tiết
-            </div>
+            </PickerViewsSells>
           </div>
         </div>
-        {Active && (
-          <div>
-            <Chart
-              options={{
-                ...options.options,
-                xaxis: {
-                  ...options.options.xaxis,
-                  categories: dataChart?.categories || [],
-                },
-              }}
-              series={dataChart?.series || []}
-              type="bar"
-              height={height}
-            />
-            <Chart
-              options={{
-                ...options.options,
-                xaxis: {
-                  ...options.options.xaxis,
-                  categories: dataChart?.categories || [],
-                },
-                yaxis: {
-                  ...options.options.yaxis,
-                  labels: {
-                    formatter: function (value) {
-                      return formatString.formatVND(value);
-                    },
+        <div>
+          <Chart
+            options={{
+              ...options.options,
+              xaxis: {
+                ...options.options.xaxis,
+                categories: dataChart?.categories || [],
+              },
+            }}
+            series={dataChart?.series || []}
+            type="bar"
+            height={height}
+          />
+          <Chart
+            options={{
+              ...options.options,
+              xaxis: {
+                ...options.options.xaxis,
+                categories: dataChart?.categories || [],
+              },
+              yaxis: {
+                ...options.options.yaxis,
+                labels: {
+                  formatter: function (value) {
+                    return formatString.formatVND(value);
                   },
                 },
-                tooltip: {
-                  y: {
-                    formatter: function (val) {
-                      return "" + formatString.formatVND(val) + "";
-                    },
+              },
+              tooltip: {
+                y: {
+                  formatter: function (val) {
+                    return "" + formatString.formatVND(val) + "";
                   },
                 },
-                plotOptions: {
-                  ...options.options.plotOptions,
-                  bar: {
-                    ...options.options.plotOptions.bar,
-                    dataLabels: {
-                      ...options.options.plotOptions.bar.dataLabels,
-                      total: {
-                        ...options.options.plotOptions.bar.dataLabels.total,
-                        formatter: function (val, opts) {
-                          return formatString.formatVND(val);
-                        },
+              },
+              plotOptions: {
+                ...options.options.plotOptions,
+                bar: {
+                  ...options.options.plotOptions.bar,
+                  dataLabels: {
+                    ...options.options.plotOptions.bar.dataLabels,
+                    total: {
+                      ...options.options.plotOptions.bar.dataLabels.total,
+                      formatter: function (val, opts) {
+                        return formatString.formatVND(val);
                       },
                     },
                   },
                 },
-              }}
-              series={dataChart?.seriesDs || []}
-              type="bar"
-              height={height}
-            />
-          </div>
-        )}
-        {!Active && (
+              },
+            }}
+            series={dataChart?.seriesDs || []}
+            type="bar"
+            height={height}
+          />
+        </div>
+        {/* {!Active && (
           <div
             className="grid grid-cols-1 gap-4 md:gap-0 md:grid-cols-2"
             style={{ height: elRef?.current?.clientHeight }}
@@ -838,7 +748,7 @@ function Sells({ filters }) {
               height="auto"
             />
           </div>
-        )}
+        )} */}
       </div>
     </>
   );
