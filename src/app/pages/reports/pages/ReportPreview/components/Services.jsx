@@ -6,7 +6,7 @@ import React from "react";
 import ReportsAPI from "src/app/_ezs/api/reports.api";
 import { useRoles } from "src/app/_ezs/hooks/useRoles";
 import { formatArray } from "src/app/_ezs/utils/formatArray";
-import { PickerViews } from ".";
+import { PickerViews, PickerViewsServices } from ".";
 
 function Services({ filters }) {
   const { report, bao_cao_ngay_tong_quan } = useRoles([
@@ -120,7 +120,22 @@ function Services({ filters }) {
 
   return (
     <div className="col-span-2 p-6 rounded shadow-xxl">
-      <div className="mb-6 text-xl font-semibold">Dịch vụ</div>
+      <div className="flex items-center justify-between mb-6">
+        <div className="text-xl font-semibold ">Dịch vụ</div>
+        <PickerViewsServices filters={filters}>
+          {({ open }) => (
+            <div
+              className={clsx(
+                "items-center block px-3 py-2 rounded text-[15px] cursor-pointer bg-primary text-white"
+              )}
+              onClick={open}
+            >
+              Xem biểu đồ
+            </div>
+          )}
+        </PickerViewsServices>
+      </div>
+
       {isLoading && (
         <div>
           <div className="pb-4 mb-4 border-b last:pb-0 last:mb-0 last:border-0">
