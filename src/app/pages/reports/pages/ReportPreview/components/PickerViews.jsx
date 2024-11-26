@@ -12,6 +12,7 @@ import { formatString } from "src/app/_ezs/utils/formatString";
 import { useWindowSize } from "src/app/_ezs/hooks/useWindowSize";
 import { PickerViewMobile } from ".";
 import { SpinnerComponent } from "src/app/_ezs/components/spinner";
+import Text from 'react-texty'
 
 const getWidth = (name) => {
   if (
@@ -38,8 +39,8 @@ const getWidth = (name) => {
       "ID đơn hàng",
       "Tại:(nhà/spa)",
       "Ngày",
-      "Giờ checkin", 
-      "Giờ checkout"
+      "Giờ checkin",
+      "Giờ checkout",
     ].includes(name)
   ) {
     return 150;
@@ -149,7 +150,7 @@ function PickerViews({ children, group, item, api }) {
               "Ngày Tạo",
               "NGày",
               "Ngày tạo đặt lịch",
-              "Ngày"
+              "Ngày",
             ].includes(key)
           ) {
             obj["cellRenderer"] = ({ rowData }) =>
@@ -163,9 +164,7 @@ function PickerViews({ children, group, item, api }) {
           }
           if (["Giờ checkin", "Giờ checkout"].includes(key)) {
             obj["cellRenderer"] = ({ rowData }) =>
-              rowData[key]
-                ? moment(rowData[key]).format("HH:mm")
-                : "";
+              rowData[key] ? moment(rowData[key]).format("HH:mm") : "";
           }
           if (
             [
@@ -190,11 +189,24 @@ function PickerViews({ children, group, item, api }) {
               "Chuyển khoản",
               "Quẹt thẻ",
               "Giá trị",
-              "Số tiền"
+              "Số tiền",
             ].includes(key)
           ) {
             obj["cellRenderer"] = ({ rowData }) =>
               formatString.formatVNDPositive(rowData[key]);
+          }
+          if (group.Title === "Đặt lịch") {
+            if (key === "Ghi chú") {
+              obj["cellRenderer"] = ({ rowData }) => (
+                <Text tooltipMaxWidth={280}>
+                  {rowData[key]
+                    ? rowData[key]
+                        .replaceAll("\n", " | ")
+                        .replaceAll("</br>", ", ")
+                    : ""}
+                </Text>
+              );
+            }
           }
           clms.push(obj);
         }
