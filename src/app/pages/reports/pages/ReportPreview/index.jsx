@@ -131,9 +131,6 @@ function ReportPreview(props) {
     }
   };
 
-  window.top.StringJSX = TextToSpeech;
-  window.StringJSX = TextToSpeech;
-
   return (
     <ReportContext.Provider
       value={{ Store, setStore, currentMusic, setCurrentMusic }}
