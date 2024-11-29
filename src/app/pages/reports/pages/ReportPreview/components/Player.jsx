@@ -36,6 +36,7 @@ function Player(props) {
                 ref={playerRef}
                 autoPlay
                 src={currentMusic.src}
+                preload="auto"
                 //onPlay={(e) => console.log("onPlay")}
               />
             </>

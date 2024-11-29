@@ -44,6 +44,7 @@ function ReportPreview(props) {
     // DateStart: moment().clone().startOf("week").toDate(), //"30/07/2024"
     // DateEnd: moment().clone().endOf("week").toDate(), //"31/07/2024"
   });
+  
   const [Store, setStore] = useState({
     Customers: [],
     Incomes: [],
@@ -73,8 +74,8 @@ function ReportPreview(props) {
     let text =
       s ||
       "Xin chào, Khách mới tạo từ phần mềm hôm nay là [KHACH_TAO_TU_PHAN_MEM]. Đơn hàng mới [DON_HANG_MOI]";
-
-    let ListsFind = text.match(/(?<=\[)[^\][]*(?=])/g);
+    
+    let ListsFind = Array.from(text.matchAll(/\[([^\][]*)]/g), x => x[1]);
 
     const rs = {};
     if (ListsFind) {
