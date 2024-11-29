@@ -6,7 +6,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import clsx from "clsx";
 import moment from "moment";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import ReportsAPI from "src/app/_ezs/api/reports.api";
 import { formatArray } from "src/app/_ezs/utils/formatArray";
 import { formatString } from "src/app/_ezs/utils/formatString";
@@ -14,6 +14,7 @@ import Chart from "react-apexcharts";
 import { useRoles } from "src/app/_ezs/hooks/useRoles";
 import { PickerViews } from ".";
 import PickerViewsSells from "./PickerViewsSells";
+import { ReportContext } from "src/app/_ezs/contexts";
 
 function arrayTime() {
   let fromTime = moment("00:00:00", "HH:mm:ss");
@@ -40,6 +41,8 @@ function arrayTime() {
 }
 
 function Sells({ filters }) {
+  const { setStore } = useContext(ReportContext);
+
   const { report, bao_cao_ngay_tong_quan } = useRoles([
     "bao_cao_ngay_tong_quan",
     "report",
@@ -163,6 +166,7 @@ function Sells({ filters }) {
         for (let group of newResult.data[0].Groups) {
           let newObj = {
             ...group,
+            KeyID: formatString.convertViToEnKey(group.Title),
             Keys: [],
           };
 
@@ -185,6 +189,7 @@ function Sells({ filters }) {
           for (let key of group.Keys) {
             newObj.Keys.push({
               ...key,
+              KeyID: formatString.convertViToEnKey(key.Title),
               Value: {
                 Count: formatArray.sumTotalNested({
                   Items: newResult.data,
@@ -201,6 +206,7 @@ function Sells({ filters }) {
                   name: "Value",
                   key: key.Key,
                 }),
+                KeyID: formatString.convertViToEnKey(key.Title),
               },
             });
           }
@@ -212,6 +218,13 @@ function Sells({ filters }) {
       return newResult;
     },
   });
+
+  useEffect(() => {
+    setStore((prevState) => ({
+      ...prevState,
+      Sells: data?.totalGroups || [],
+    }));
+  }, [data]);
 
   const { isLoading: isLoadingChart, data: dataChart } = useQuery({
     queryKey: ["ReportsSellsChart", filters],
@@ -459,6 +472,7 @@ function Sells({ filters }) {
                       <div
                         className="flex justify-between mb-6 cursor-pointer"
                         onClick={open}
+                        data-key={item.KeyID}
                       >
                         <div className="flex items-center">
                           <div
@@ -520,6 +534,7 @@ function Sells({ filters }) {
                               item.GroupTitle !== "Đơn hàng mới" && open()
                             }
                             className="cursor-pointer flex justify-between text-[15px] leading-6 border-b border-dashed pb-2 mb-2 last:border-0 last:pb-0 last:mb-0"
+                            data-key={key.KeyID}
                           >
                             <div className="flex items-center">
                               <div className="w-2.5 h-2.5 rounded-sm bg-gray-300"></div>
@@ -551,7 +566,8 @@ function Sells({ filters }) {
                   )}
                   onClick={open}
                 >
-                  Xem thêm <span className="hidden md:inline-block">biểu đồ</span>
+                  Xem thêm{" "}
+                  <span className="hidden md:inline-block">biểu đồ</span>
                 </div>
               )}
             </PickerViewsSells>

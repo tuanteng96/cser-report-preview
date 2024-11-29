@@ -6,13 +6,15 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import clsx from "clsx";
 import moment from "moment";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import Chart from "react-apexcharts";
 import ReportsAPI from "src/app/_ezs/api/reports.api";
 import { useRoles } from "src/app/_ezs/hooks/useRoles";
 import { formatArray } from "src/app/_ezs/utils/formatArray";
 import { PickerViews } from ".";
 import { filter } from "lodash-es";
+import { formatString } from "src/app/_ezs/utils/formatString";
+import { ReportContext } from "src/app/_ezs/contexts";
 
 let arrayColor = [
   {
@@ -74,6 +76,8 @@ const getValues = ({ item, child }) => {
 };
 
 function Customers({ filters }) {
+  const { setStore } = useContext(ReportContext);
+
   const { report, bao_cao_ngay_tong_quan } = useRoles([
     "bao_cao_ngay_tong_quan",
     "report",
@@ -181,6 +185,7 @@ function Customers({ filters }) {
         for (let group of newResult.data[0].Groups) {
           let newObj = {
             ...group,
+            KeyID: formatString.convertViToEnKey(group.Title),
             Keys: [],
           };
 
@@ -221,6 +226,7 @@ function Customers({ filters }) {
                 }),
               },
               Color: getColor(key.Key),
+              KeyID: formatString.convertViToEnKey(key.Title),
             });
           }
 
@@ -231,6 +237,13 @@ function Customers({ filters }) {
       return newResult;
     },
   });
+
+  useEffect(() => {
+    setStore((prevState) => ({
+      ...prevState,
+      Customers: data?.totalGroups || [],
+    }));
+  }, [data]);
 
   const { isLoading: isLoadingChart, data: dataChart } = useQuery({
     queryKey: ["ReportsCustomersChart", filters],
@@ -346,7 +359,6 @@ function Customers({ filters }) {
           ),
         }));
       }
-
       return newResult;
     },
   });
@@ -358,7 +370,9 @@ function Customers({ filters }) {
   return (
     <>
       <div className="col-span-2 p-6 rounded shadow-xxl">
-        <div className="mb-6 text-xl font-semibold">Khách hàng</div>
+        <div className="mb-6 text-xl font-semibold">
+          Khách hàng
+        </div>
         <div ref={elRef}>
           {!isLoading && (
             <>
@@ -382,6 +396,7 @@ function Customers({ filters }) {
                       <div
                         className="flex justify-between mb-6 cursor-pointer"
                         onClick={open}
+                        data-key={item.KeyID}
                       >
                         <div className="flex items-center">
                           <div
@@ -441,6 +456,7 @@ function Customers({ filters }) {
                           <div
                             className="cursor-pointer flex justify-between text-[15px] leading-6 border-b border-dashed pb-2 mb-2 last:border-0 last:pb-0 last:mb-0"
                             onClick={open}
+                            data-key={key.KeyID}
                           >
                             <div className="flex items-center">
                               <div

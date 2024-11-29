@@ -2,14 +2,17 @@ import { BanknotesIcon, UsersIcon } from "@heroicons/react/24/outline";
 import { useQuery } from "@tanstack/react-query";
 import clsx from "clsx";
 import moment from "moment";
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import ReportsAPI from "src/app/_ezs/api/reports.api";
 import { useRoles } from "src/app/_ezs/hooks/useRoles";
 import { formatArray } from "src/app/_ezs/utils/formatArray";
 import { formatString } from "src/app/_ezs/utils/formatString";
 import { PickerViews } from ".";
+import { ReportContext } from "src/app/_ezs/contexts";
 
 function Members({ filters }) {
+  const { setStore } = useContext(ReportContext);
+
   const { report, bao_cao_ngay_tong_quan } = useRoles([
     "bao_cao_ngay_tong_quan",
     "report",
@@ -70,6 +73,7 @@ function Members({ filters }) {
           let newObj = {
             ...group,
             Keys: [],
+            KeyID: formatString.convertViToEnKey(group.Title),
           };
 
           newObj.GroupCount = formatArray.sumTotalNested({
@@ -91,6 +95,7 @@ function Members({ filters }) {
           for (let key of group.Keys) {
             newObj.Keys.push({
               ...key,
+              KeyID: formatString.convertViToEnKey(key.Title),
               Value: {
                 Count: formatArray.sumTotalNested({
                   Items: newResult.data,
@@ -118,6 +123,13 @@ function Members({ filters }) {
       return newResult;
     },
   });
+
+  useEffect(() => {
+    setStore((prevState) => ({
+      ...prevState,
+      Members: data?.totalGroups || [],
+    }));
+  }, [data]);
 
   return (
     <div className="col-span-2 p-6 rounded shadow-xxl">
@@ -279,6 +291,7 @@ function Members({ filters }) {
                   <div
                     className="flex justify-between mb-6 cursor-pointer"
                     onClick={open}
+                    data-key={item.KeyID}
                   >
                     <div className="flex items-center">
                       <div
@@ -341,6 +354,7 @@ function Members({ filters }) {
                       <div
                         className="cursor-pointer flex justify-between text-[15px] leading-6 border-b border-dashed pb-2 mb-2 last:border-0 last:pb-0 last:mb-0"
                         onClick={open}
+                        data-key={key.KeyID}
                       >
                         <div className="flex items-center">
                           <div className="w-2.5 h-2.5 rounded-sm bg-gray-300"></div>
