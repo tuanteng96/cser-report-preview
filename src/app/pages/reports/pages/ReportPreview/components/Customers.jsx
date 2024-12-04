@@ -242,6 +242,7 @@ function Customers({ filters }) {
     setStore((prevState) => ({
       ...prevState,
       Customers: data?.totalGroups || [],
+      isLoadingCustomers: false,
     }));
   }, [data]);
 

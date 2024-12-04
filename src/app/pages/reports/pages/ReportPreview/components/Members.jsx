@@ -128,6 +128,7 @@ function Members({ filters }) {
     setStore((prevState) => ({
       ...prevState,
       Members: data?.totalGroups || [],
+      isLoadingMembers: false
     }));
   }, [data]);
 

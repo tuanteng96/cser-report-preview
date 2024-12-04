@@ -1,5 +1,6 @@
 import { useState, useEffect, createContext, useContext } from "react";
 import { LayoutSplashScreen } from "./EzsSplashScreen";
+import axios from "axios";
 
 const AuthContext = createContext();
 
@@ -52,7 +53,7 @@ if (import.meta.env.DEV) {
                             Title: "Cser Hồ Chí Minh",
                             ID: 11410,
                             ParentID: 778,
-                          }
+                          },
                         ],
                         IsAllStock: false,
                       },
@@ -81,7 +82,7 @@ if (import.meta.env.DEV) {
     },
     CrStockID: 11424,
     token:
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBdXRoMlR5cGUiOiJVc2VyRW50IiwiSUQiOiIxIiwiVG9rZW5JZCI6IjEwNjEzMzEwNjc1MSIsIm5iZiI6MTczMjg2ODk3MywiZXhwIjoxODE5MjY4OTczLCJpYXQiOjE3MzI4Njg5NzN9.uo5ov-btwFPD77CJhYyy_A4RxQL2VXfGcjP5n3rbuxQ',
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBdXRoMlR5cGUiOiJVc2VyRW50IiwiSUQiOiIxIiwiVG9rZW5JZCI6IjEwNjEzMzEwNjgxNCIsIm5iZiI6MTczMzI3OTQ4NiwiZXhwIjoxODE5Njc5NDg2LCJpYXQiOjE3MzMyNzk0ODZ9._2GNmhcigKu7ftN_GyyeftjlUh2wQzwhGyAP-05UEY4",
   };
 }
 
@@ -108,6 +109,7 @@ const AuthProvider = ({ children }) => {
   const [CrStocks, setCrStocks] = useState(null);
   const [Stocks, setStocks] = useState(null);
   const [RightTree, setRightTree] = useState(null);
+  const [GlobalConfig, setGlobalConfig] = useState(null);
 
   const saveAuth = ({ CrStockID, token, User, rightTree, ...values }) => {
     let newStocks = values.Stocks
@@ -137,6 +139,8 @@ const AuthProvider = ({ children }) => {
         Stocks,
         RightTree,
         saveAuth,
+        GlobalConfig,
+        setGlobalConfig,
       }}
     >
       {children}
@@ -145,7 +149,7 @@ const AuthProvider = ({ children }) => {
 };
 
 const AuthInit = ({ children }) => {
-  const { saveAuth } = useAuth();
+  const { saveAuth, setGlobalConfig } = useAuth();
   const [showSplashScreen, setShowSplashScreen] = useState(true);
 
   useEffect(() => {
@@ -153,6 +157,20 @@ const AuthInit = ({ children }) => {
       setShowSplashScreen(false);
       saveAuth(Auth);
     });
+
+    axios
+      .get(
+        (import.meta.env.MODE === "development"
+          ? import.meta.env.VITE_HOST
+          : window.location.origin) +
+          "/brand/global/global.json?" +
+          new Date().getTime()
+      )
+      .then(({ data }) => {
+        if (data) {
+          setGlobalConfig(data);
+        }
+      });
     // eslint-disable-next-line
   }, []);
 

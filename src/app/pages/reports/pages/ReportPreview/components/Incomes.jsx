@@ -131,6 +131,7 @@ function Incomes({ filters }) {
     setStore((prevState) => ({
       ...prevState,
       Incomes: data?.totalGroups || [],
+      isLoadingIncomes: false,
     }));
   }, [data]);
 

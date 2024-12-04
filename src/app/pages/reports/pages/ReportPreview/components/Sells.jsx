@@ -223,6 +223,7 @@ function Sells({ filters }) {
     setStore((prevState) => ({
       ...prevState,
       Sells: data?.totalGroups || [],
+      isLoadingSells: false,
     }));
   }, [data]);
 

@@ -128,6 +128,7 @@ function Services({ filters }) {
     setStore((prevState) => ({
       ...prevState,
       Services: data?.totalGroups || [],
+      isLoadingServices: false,
     }));
   }, [data]);
 
