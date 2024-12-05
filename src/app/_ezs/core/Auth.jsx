@@ -25,6 +25,11 @@ if (import.meta.env.DEV) {
         ID: 11424,
         ParentID: 778,
       },
+      {
+        Title: "Cser Hồ Chí Minh",
+        ID: 11425,
+        ParentID: 778,
+      },
     ],
     rightTree: {
       groups: [

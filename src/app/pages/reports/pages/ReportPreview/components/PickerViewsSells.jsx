@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { FloatingPortal } from "@floating-ui/react";
 import { Dialog } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
@@ -10,10 +10,12 @@ import { useRoles } from "src/app/_ezs/hooks/useRoles";
 import moment from "moment";
 import ReportsAPI from "src/app/_ezs/api/reports.api";
 import { formatArray } from "src/app/_ezs/utils/formatArray";
+import { ReportContext } from "src/app/_ezs/contexts";
 
 var heightlegend = 50;
 
 function PickerViewsSells({ children, filters }) {
+  const { setStore } = useContext(ReportContext);
   const { report, bao_cao_ngay_tong_quan } = useRoles([
     "bao_cao_ngay_tong_quan",
     "report",
@@ -101,8 +103,15 @@ function PickerViewsSells({ children, filters }) {
 
       return rs;
     },
-    enabled: visible,
+    //enabled: visible,
   });
+
+  useEffect(() => {
+    setStore((prevState) => ({
+      ...prevState,
+      SellsChart: data,
+    }));
+  }, [data]);
 
   const onHide = () => {
     setVisible(false);

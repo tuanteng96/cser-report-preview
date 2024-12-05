@@ -26,7 +26,7 @@ import axios from "axios";
 import clsx from "clsx";
 
 function ReportPreview(props) {
-  let { CrStocks, GlobalConfig } = useAuth();
+  let { CrStocks, GlobalConfig, Stocks, accessToken } = useAuth();
   const queryClient = useQueryClient();
 
   const { report, bao_cao_ngay_tong_quan } = useRoles([
@@ -53,6 +53,7 @@ function ReportPreview(props) {
     Sells: [],
     Services: [],
     Members: [],
+    SellsChart: null,
     isLoadingCustomers: true,
     isLoadingIncomes: true,
     isLoadingSells: true,
@@ -84,11 +85,109 @@ function ReportPreview(props) {
     ]);
   };
 
+  const SumKey = (keys) => {
+    let total = 0;
+    if (!keys || keys.length === 0) return total;
+    for (let key of keys) {
+      Object.keys(Store).every((s) => {
+        if (typeof Store[s] === "object" && Array.isArray(Store[s])) {
+          Store[s].every((group) => {
+            if (group.KeyID === key) {
+              total = total + group.GroupValue;
+              return;
+            }
+            let index = group.Keys
+              ? group.Keys.findIndex((x) => x.KeyID === key)
+              : -1;
+            if (index > -1) {
+              total = total + group.Keys[index].Value?.Value;
+              return;
+            }
+
+            return true;
+          });
+        }
+
+        return true;
+      });
+    }
+    return total >= 0 ? total : total * -1;
+  };
+
   const TextToSpeech = (s) => {
     if (!GlobalConfig?.Admin?.TextToSpeech) return;
+    let StocksFilters = [];
+    let SalesRate = [0, 0, 0];
+    let SalesTop = [
+      ...(Store.SellsChart?.DV?.Items || []),
+      ...(Store.SellsChart?.SP?.Items || []),
+      ...(Store.SellsChart?.TT?.Items || []),
+    ];
+
+    SalesTop = SalesTop.sort((a, b) => b.SumTopay - a.SumTopay).slice(0, 5);
+
+    if (
+      Store.SellsChart?.TOTAL?.series &&
+      Store.SellsChart?.TOTAL?.series.length > 0
+    ) {
+      const sum = Store.SellsChart?.TOTAL?.series.reduce(
+        (partialSum, a) => partialSum + a,
+        0
+      );
+      for (let [i, value] of Store.SellsChart?.TOTAL?.series.entries()) {
+        SalesRate[i] = Math.round((value / sum) * 100);
+      }
+    }
+
+    if (!filters.StockID) {
+      StocksFilters.push("Toàn hệ thống");
+    } else {
+      for (let st of filters.StockID) {
+        let index = Stocks.findIndex((x) => x.ID === Number(st));
+        if (index > -1) StocksFilters.push(Stocks[index].Title);
+      }
+    }
+
     let text =
-      s ||
-      "Xin chào, Khách mới tạo từ phần mềm hôm nay là [KHACH_TAO_TU_PHAN_MEM]. Đơn hàng mới [DON_HANG_MOI]";
+      "Xin chào, Báo cáo " +
+      moment(filters.CrDate).format("[ngày] DD [tháng] MM [Năm] YYYY") +
+      " tại " +
+      StocksFilters.join(", ") +
+      " .";
+    text += `Về khách hàng. ${
+      SumKey(["KHACH_TAO_MOI"]) > 0
+        ? "Có [KHACH_TAO_MOI] khách được tạo mới trong đó [KHACH_DANG_KY_TU_WEB_APP] khách đăng ký qua web và app"
+        : "Không có khách hàng được tạo mới"
+    }. ${
+      SumKey(["KHACH_TAI_APP"]) > 0
+        ? "[KHACH_TAI_APP] khách tải app gồm [KHACH_CU_TAI_APP] khách cũ và [KHACH_MOI_TAI_APP] khách mới"
+        : "Không có khách hàng tải APP"
+    }. `;
+    text += `Về doanh thu. ${
+      SumKey(["DON_HANG_MOI"]) > 0
+        ? `Bán mới Đạt [DON_HANG_MOI], chi phí giảm giá [GIAM_GIA], khách thanh toán thực tế là [THANH_TOAN_TM_CK_QT], thanh toán ${SumKey(
+            ["THANH_TOAN_VI", "THANH_TOAN_THE_TIEN"]
+          )} đến từ ví và thẻ tiền, còn nợ lại [CON_NO_LAI]`
+        : "Không phát sinh doanh thu bán mới"
+    }. ${
+      SumKey(["THU_NO"]) > 0
+        ? "Thu nợ cũ đạt [THU_NO] trong đó gồm [THANH_TOAN_TM_CK_QT_] , [THANH_TOAN_VI_] từ ví và [THANH_TOAN_THE_TIEN_] từ thẻ tiền."
+        : "Không phát sinh thu nợ."
+    } `;
+    text += `Doanh thu bán mới theo tỉ lệ gồm ${SalesRate[1]}% dịch vụ, ${
+      SalesRate[0]
+    }% sản phẩm, ${
+      SalesRate[2]
+    }% thẻ tiền. Top 5 sản phẩm, dịch vụ chiếm doanh thu cao nhất gồm ${SalesTop.map(
+      (x) => x.ProdTitle
+    ).join(", ")}. `;
+    text += `Về đặt lịch & dịch vụ. ${
+      SumKey(["DAT_LICH"]) > 0
+        ? `Có [DAT_LICH] đặt lịch, [KHACH_CO_DEN] khách đến theo lịch đặt, số khách đặt lịch không đến là [KHACH_KHONG_DEN], Hủy lịch [KHACH_HUY_LICH]`
+        : "Không có đặt lịch mới"
+    }. Có [DA_XONG] dịch vụ đã được thực hiện xong, [DANG_THUC_HIEN] dịch vụ đang thực hiện. `;
+    text +=
+      "Có [NHAN_VIEN_DI_LAM] nhân viên đi làm, đã về [DA_VE], còn lại [DANG_LAM_VIEC] người. Tổng lương ca dự kiến phải trả [TONG_LUONG_TOUR], Hoa hồng tư vấn bán sản phẩm, dịch vụ là [TONG_HOA_HONG].";
 
     let ListsFind = Array.from(text.matchAll(/\[([^\][]*)]/g), (x) => x[1]);
 
@@ -96,17 +195,23 @@ function ReportPreview(props) {
     if (ListsFind) {
       for (let key of ListsFind) {
         Object.keys(Store).every((s) => {
-          if (typeof Store[s] === "object") {
+          if (typeof Store[s] === "object" && Array.isArray(Store[s])) {
             Store[s].every((group) => {
               if (group.KeyID === key) {
-                rs[`[${key}]`] = group.GroupValue;
+                rs[`[${key}]`] =
+                  group.GroupValue >= 0
+                    ? group.GroupValue
+                    : group.GroupValue * -1;
                 return;
               }
               let index = group.Keys
                 ? group.Keys.findIndex((x) => x.KeyID === key)
                 : -1;
               if (index > -1) {
-                rs[`[${key}]`] = group.Keys[index].Value?.Value;
+                rs[`[${key}]`] =
+                  group.Keys[index].Value?.Value >= 0
+                    ? group.Keys[index].Value?.Value
+                    : group.Keys[index].Value?.Value * -1;
                 return;
               }
 
@@ -120,7 +225,7 @@ function ReportPreview(props) {
     }
 
     text = formatString.replaceAll(text, rs);
-
+   
     if (currentMusic.string && text === currentMusic.string) {
       setCurrentMusic((prevState) => ({
         ...prevState,
@@ -130,29 +235,32 @@ function ReportPreview(props) {
       if (GlobalConfig?.Admin?.TextToSpeech.toUpperCase() === "GOOGLE") {
         textSpeechMutation.mutate(
           {
-            url: "https://texttospeech.googleapis.com/v1/text:synthesize",
-            headers: {},
-            param: {
-              key: "{KEY_API_TEXT_TO_SPEECH}",
-            },
-            method: "POST", //"GET",
-            include: "ENV",
             body: {
-              audioConfig: {
-                audioEncoding: "LINEAR16",
-                effectsProfileId: ["small-bluetooth-speaker-class-device"],
-                pitch: 0,
-                speakingRate: 1,
+              url: "https://texttospeech.googleapis.com/v1/text:synthesize",
+              headers: {},
+              param: {
+                key: "{KEY_API_TEXT_TO_SPEECH}",
               },
-              input: {
-                text: text,
+              method: "POST", //"GET",
+              include: "ENV",
+              body: {
+                audioConfig: {
+                  audioEncoding: "LINEAR16",
+                  effectsProfileId: ["small-bluetooth-speaker-class-device"],
+                  pitch: 0,
+                  speakingRate: 1,
+                },
+                input: {
+                  text: text,
+                },
+                voice: {
+                  languageCode: "vi-VN",
+                  name: "vi-VN-Wavenet-D",
+                },
               },
-              voice: {
-                languageCode: "vi-VN",
-                name: "vi-VN-Wavenet-D",
-              },
+              resultType: "json",
             },
-            resultType: "json",
+            Token: accessToken,
           },
           {
             onSuccess: ({ data }) => {
@@ -171,19 +279,22 @@ function ReportPreview(props) {
       if (GlobalConfig?.Admin?.TextToSpeech.toUpperCase() === "ZALO") {
         textSpeechMutation.mutate(
           {
-            url: "https://api.zalo.ai/v1/tts/synthesize",
-            headers: {
-              "Content-Type": "application/x-www-form-urlencoded",
-              apikey: "[KEY_API_TEXT_TO_SPEECH_ZALO]",
-            },
-            method: "POST", //"GET",
-            include: "ENV",
             body: {
-              speaker_id: "4",
-              speed: "1",
-              input: text,
+              url: "https://api.zalo.ai/v1/tts/synthesize",
+              headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+                apikey: "[KEY_API_TEXT_TO_SPEECH_ZALO]",
+              },
+              method: "POST", //"GET",
+              include: "ENV",
+              body: {
+                speaker_id: "4",
+                speed: "1",
+                input: text,
+              },
+              resultType: "json",
             },
-            resultType: "json",
+            Token: accessToken,
           },
           {
             onSuccess: ({ data }) => {
