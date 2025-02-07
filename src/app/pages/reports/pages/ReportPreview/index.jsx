@@ -15,6 +15,7 @@ import moment from "moment";
 import {
   AdjustmentsVerticalIcon,
   ArrowPathIcon,
+  Bars3Icon,
   PlayIcon,
 } from "@heroicons/react/24/outline";
 import { useRoles } from "src/app/_ezs/hooks/useRoles";
@@ -24,16 +25,22 @@ import { formatString } from "src/app/_ezs/utils/formatString";
 import ConfigAPI from "src/app/_ezs/api/config.api";
 import axios from "axios";
 import clsx from "clsx";
+import { useWindowSize } from "src/app/_ezs/hooks/useWindowSize";
+import { NavLink } from "react-router-dom";
+
+const hasRouter = () => {
+  return "/admin/?mdl20=R23&act20=index#rp:";
+};
 
 function ReportPreview(props) {
   let { CrStocks, GlobalConfig, Stocks, accessToken } = useAuth();
   const queryClient = useQueryClient();
-
+  const { width } = useWindowSize();
   const { report, bao_cao_ngay_tong_quan } = useRoles([
     "bao_cao_ngay_tong_quan",
     "report",
   ]);
-
+  const [isShowMobile, setIsShowMobile] = useState(false);
   const [filters, setFilters] = useState({
     Type: "",
     StockID:
@@ -59,6 +66,7 @@ function ReportPreview(props) {
     isLoadingSells: true,
     isLoadingServices: true,
     isLoadingMembers: true,
+    isLoadingSellsChart: true,
   });
 
   const [currentMusic, setCurrentMusic] = useState({
@@ -66,6 +74,311 @@ function ReportPreview(props) {
     prevSrc: "",
     src: "",
   });
+
+  const [MenuList, setMenuList] = useState([
+    {
+      Title: "Báo cáo ngày",
+      TitleKey: "BAO_CAO_NGAY",
+      IconClass: "fa-regular fa-chart-pie icon",
+      Href: hasRouter() + "/bao-cao-ngay",
+      Children: [
+        {
+          Title: "Tổng quan",
+          Href: hasRouter() + "/bao-cao-ngay/tong-quan",
+        },
+        {
+          Title: "Khách hàng",
+          Href: hasRouter() + "/bao-cao-ngay/khach-hang",
+        },
+      ],
+    },
+    {
+      Title: "Khách hàng",
+      TitleKey: "KHACH_HANG",
+      IconClass: "fa-regular fa-chart-user icon",
+      Href: hasRouter() + "/khach-hang",
+      Children: [
+        {
+          Title: "Tổng quan khách hàng",
+          Href: hasRouter() + "/khach-hang/tong-quan",
+        },
+        {
+          Title: "Tổng hợp khách hàng",
+          Href: hasRouter() + "/khach-hang/tong-hop",
+        },
+        {
+          Title: "Chi tiêu",
+          Href: hasRouter() + "/khach-hang/chi-tieu",
+        },
+        {
+          Title: "Sử dụng dịch vụ",
+          Href: hasRouter() + "/khach-hang/su-dung-dich-vu",
+        },
+        {
+          Title: "Dự kiến",
+          Href: hasRouter() + "/khach-hang/du-kien",
+        },
+        {
+          Title: "Tần suất sử dụng",
+          Href: hasRouter() + "/khach-hang/tan-suat-su-dung",
+        },
+        {
+          Title: "Chuyển đổi",
+          Href: hasRouter() + "/khach-hang/chuyen-doi",
+        },
+      ],
+    },
+    {
+      Title: "Dịch vụ",
+      TitleKey: "DICH_VU",
+      IconClass: "fa-regular fa-chart-waterfall icon",
+      Href: hasRouter() + "/dich-vu",
+      Children: [
+        {
+          Title: "Tổng quan - Doanh số",
+          Href: hasRouter() + "/dich-vu/tong-quan",
+        },
+        {
+          Title: "Báo cáo nghiệp vụ",
+          Href: hasRouter() + "/dich-vu/bao-cao-nghiep-vu",
+        },
+        {
+          Title: "Dịch vụ điểm này, sử dụng điểm khác",
+          Href: hasRouter() + "/dich-vu/dv-diem-sd-diem-khac",
+        },
+        {
+          Title: "Tồn dịch vụ",
+          Href: hasRouter() + "/dich-vu/ton-dich-vu",
+        },
+        {
+          Title: "Báo cáo đặt lịch",
+          Href: hasRouter() + "/dich-vu/bao-cao-dat-lich",
+        },
+      ],
+    },
+    {
+      Title: "Bán hàng",
+      TitleKey: "BAN_HANG",
+      IconClass: "fa-regular fa-cart-circle-check icon",
+      Href: hasRouter() + "/ban-hang",
+      Children: [
+        {
+          Title: "Doanh số",
+          Href: hasRouter() + "/ban-hang/doanh-so",
+        },
+        {
+          Title: "Doanh số mới",
+          Href: hasRouter() + "/ban-hang/ds-bc-2",
+          hidden: !GlobalConfig?.Admin?.bao_cao_mely,
+        },
+        {
+          Title: "Sản phẩm, dịch vụ bán ra",
+          Href: hasRouter() + "/ban-hang/sp-dv-ban-ra",
+        },
+        {
+          Title: "Trả hàng",
+          Href: hasRouter() + "/ban-hang/tra-hang",
+        },
+        {
+          Title: "Thanh toán trả nợ",
+          Href: hasRouter() + "/ban-hang/thanh-toan-tra-no",
+        },
+        {
+          Title: "Top bán hàng, doanh số",
+          Href: hasRouter() + "/ban-hang/top-ban-hang-doanh-so",
+        },
+        {
+          Title: "Doanh số giảm trừ ( kết thúc thẻ, xóa buổi )",
+          Href: hasRouter() + "/ban-hang/doanh-so-giam-tru",
+        },
+        {
+          Title: "Bảng giá",
+          Href: hasRouter() + "/ban-hang/bang-gia",
+        },
+        {
+          Title: "Lợi nhuận",
+          Href: hasRouter() + "/ban-hang/loi-nhuan",
+        },
+        {
+          Title: "Doanh số thực thu",
+          Href: hasRouter() + "/ban-hang/doanh-so-thuc-thu",
+        },
+      ],
+    },
+    {
+      Title: "Thu chi & Sổ quỹ",
+      TitleKey: "BAO_CAO_THU_CHI",
+      IconClass: "fa-regular fa-piggy-bank icon",
+      Href: hasRouter() + "/bao-cao-thu-chi",
+      Children: [
+        {
+          Title: "Thu chi & Sổ quỹ",
+          Href: hasRouter() + "/bao-cao-thu-chi/tong-quan",
+        },
+        {
+          Title: "Thanh toán các phương thức chuyển khoản",
+          Href: hasRouter() + "/bao-cao-thu-chi/cac-phuong-thuc-thanh-toan",
+        },
+      ],
+    },
+    {
+      Title: "Công nợ",
+      TitleKey: "CONG_NO",
+      IconClass: "fa-regular fa-chart-mixed icon",
+      Href: hasRouter() + "/cong-no",
+      Children: [
+        {
+          Title: "Công nợ",
+          Href: hasRouter() + "/cong-no/danh-sach",
+        },
+        {
+          Title: "Báo cáo khóa nợ",
+          Href: hasRouter() + "/cong-no/khoa-no",
+        },
+        {
+          Title: "Báo cáo tặng",
+          Href: hasRouter() + "/cong-no/tang",
+        },
+      ],
+    },
+    {
+      Title: "Nhân viên",
+      TitleKey: "NHAN_VIEN",
+      IconClass: "fa-regular fa-chart-candlestick icon",
+      Href: hasRouter() + "/nhan-vien",
+      Children: [
+        {
+          Title: "Lương ca dịch vụ",
+          Href: hasRouter() + "/nhan-vien/luong-ca-dich-vu",
+        },
+        {
+          Title: "Hoa hồng",
+          Href: hasRouter() + "/nhan-vien/hoa-hong",
+        },
+        {
+          Title: "Doanh số",
+          Href: hasRouter() + "/nhan-vien/doanh-so",
+        },
+        {
+          Title: "Bảng lương",
+          Href: hasRouter() + "/nhan-vien/bang-luong",
+        },
+      ],
+    },
+    {
+      Title: "Tồn kho",
+      TitleKey: "TON_KHO",
+      IconClass: "fa-regular fa-chart-pie icon",
+      Href: hasRouter() + "/ton-kho",
+      Children: [
+        {
+          Title: "Tồn kho",
+          Href: hasRouter() + "/ton-kho/danh-sach",
+        },
+        {
+          Title: "Tiêu hao",
+          Href: hasRouter() + "/ton-kho/tieu-hao",
+        },
+        {
+          Title: "Nguyên vật liệu dự kiến",
+          Href: hasRouter() + "/ton-kho/du-kien-nvl",
+        },
+      ],
+    },
+    {
+      Title: "CSKH",
+      TitleKey: "CSKH",
+      IconClass: "fa-regular fa-handshake icon",
+      Href: hasRouter() + "/cskh",
+      Children: [
+        {
+          Title: "Báo cáo cài đặt APP",
+          Href: hasRouter() + "/cskh/bao-cao-cai-dat-app",
+        },
+        // {
+        //   Title: 'Khách hàng sinh nhật',
+        //   Href: '/cskh/khach-hang-sinh-nhat'
+        // },
+        // {
+        //   Title: 'Khách hàng sắp lên cấp',
+        //   Href: '/cskh/khach-hang-sap-len-cap'
+        // },
+        // {
+        //   Title: 'Khách hàng hết sản phẩm',
+        //   Href: '/cskh/khach-hang-het-san-pham'
+        // },
+        // {
+        //   Title: 'Khách hết thẻ trong ngày',
+        //   Href: '/cskh/khach-het-the-trong-ngay'
+        // },
+        // {
+        //   Title: 'Thẻ sắp hết hạn',
+        //   Href: '/cskh/the-sap-het-han'
+        // },
+        // {
+        //   Title: 'Thời gian nghe Smart Call',
+        //   Href: '/cskh/thoi-gian-nghe-smart-call'
+        // },
+        // {
+        //   Title: 'Đánh giá dịch vụ',
+        //   Href: '/cskh/danh-gia-dich-vu'
+        // },
+        // {
+        //   Title: 'Chỉ sử dụng mã giảm giá',
+        //   Href: '/cskh/chi-su-dung-ma-giam-gia'
+        // },
+        // {
+        //   Title: 'Chỉ sử dụng buổi lẻ',
+        //   Href: '/cskh/chi-su-dung-buoi-le'
+        // },
+        // {
+        //   Title: 'Top ưu đãi sử dụng',
+        //   Href: '/cskh/top-uu-dai-su-dung'
+        // },
+        // {
+        //   Title: 'Tần suất sử dụng dịch vụ',
+        //   Href: '/cskh/tan-suat-su-dunng-dich-vu'
+        // }
+      ],
+    },
+    {
+      Title: "Khác",
+      TitleKey: "KHAC",
+      IconClass: "fa-regular fa-chart-scatter-bubble icon",
+      Href: hasRouter() + "/khac",
+      Children: [
+        // {
+        //   Title: 'Top đánh giá',
+        //   Href: '/khac/top-danh-gia'
+        // },
+        // {
+        //   Title: 'Dịch vụ đã bán chưa thực hiện',
+        //   Href: '/khac/dich-vu-da-ban-chua-thuc-hien'
+        // },
+        {
+          Title: "Báo cáo ví",
+          Href: hasRouter() + "/khac/bao-cao-vi",
+        },
+        {
+          Title: "Báo cáo thẻ tiền",
+          Href: hasRouter() + "/khac/bao-cao-the-tien",
+        },
+        {
+          Title: "Báo cáo sử dụng thẻ tiền",
+          Href: hasRouter() + "/khac/bao-cao-su-dung-the-tien",
+        },
+        {
+          Title: "Báo cáo khoá học",
+          Href: hasRouter() + "/khac/bao-cao-khoa-hoc",
+        },
+        // {
+        //   Title: 'Lợi nhuận',
+        //   Href: '/khac/loi-nhuan'
+        // }
+      ],
+    },
+  ]);
+  const [IndexShow, setIndexShow] = useState("BAO_CAO_NGAY");
 
   const textSpeechMutation = useMutation({
     mutationFn: async (body) => {
@@ -165,13 +478,13 @@ function ReportPreview(props) {
     }. `;
     text += `Về doanh thu. ${
       SumKey(["DON_HANG_MOI"]) > 0
-        ? `Bán mới Đạt [DON_HANG_MOI], chi phí giảm giá [GIAM_GIA], khách thanh toán thực tế là [THANH_TOAN_TM_CK_QT], thanh toán ${SumKey(
+        ? `Bán mới Đạt [DON_HANG_MOI] đồng, chi phí giảm giá [GIAM_GIA] đồng, khách thanh toán thực tế là [THANH_TOAN_TM_CK_QT] đồng, thanh toán ${SumKey(
             ["THANH_TOAN_VI", "THANH_TOAN_THE_TIEN"]
-          )} đến từ ví và thẻ tiền, còn nợ lại [CON_NO_LAI]`
+          )} đồng đến từ ví và thẻ tiền, còn nợ lại [CON_NO_LAI] đồng`
         : "Không phát sinh doanh thu bán mới"
     }. ${
       SumKey(["THU_NO"]) > 0
-        ? "Thu nợ cũ đạt [THU_NO] trong đó gồm [THANH_TOAN_TM_CK_QT_] , [THANH_TOAN_VI_] từ ví và [THANH_TOAN_THE_TIEN_] từ thẻ tiền."
+        ? "Thu nợ cũ đạt [THU_NO] đồng trong đó gồm [THANH_TOAN_TM_CK_QT_] đồng, [THANH_TOAN_VI_] đồng từ ví và [THANH_TOAN_THE_TIEN_] đồng từ thẻ tiền."
         : "Không phát sinh thu nợ."
     } `;
     text += `Doanh thu bán mới theo tỉ lệ gồm ${SalesRate[1]}% dịch vụ, ${
@@ -225,7 +538,6 @@ function ReportPreview(props) {
     }
 
     text = formatString.replaceAll(text, rs);
-   
     if (currentMusic.string && text === currentMusic.string) {
       setCurrentMusic((prevState) => ({
         ...prevState,
@@ -312,178 +624,359 @@ function ReportPreview(props) {
     }
   };
 
+  const OpenSubmenu = (key) => {
+    if (key === IndexShow) {
+      setIndexShow("");
+    } else {
+      setIndexShow(key);
+    }
+  };
+
   return (
     <ReportContext.Provider
       value={{ Store, setStore, currentMusic, setCurrentMusic }}
     >
-      <div className="p-4 xl:p-6">
-        <div className="flex items-center justify-between mb-4 lg:mb-6">
-          <div className="text-xl font-semibold lg:text-2xl">
-            Báo cáo tổng quan
-          </div>
-          <div className="hidden gap-2 lg:flex">
-            {GlobalConfig?.Admin?.TextToSpeech ? (
-              <button
-                disabled={
-                  Store.isLoadingCustomers ||
-                  Store.isLoadingIncomes ||
-                  Store.isLoadingMembers ||
-                  Store.isLoadingSells ||
-                  Store.isLoadingServices ||
-                  textSpeechMutation?.isPending
-                }
-                type="button"
-                className={clsx(
-                  "w-[50px] h-[50px] flex items-center justify-center bg-[#C9F7F5] text-success rounded cursor-pointer disabled:opacity-80 group",
-                  Store.isLoadingCustomers ||
-                    Store.isLoadingIncomes ||
-                    Store.isLoadingMembers ||
-                    Store.isLoadingSells ||
-                    Store.isLoadingServices ||
-                    textSpeechMutation?.isPending
-                    ? "is-loading"
-                    : "not-loading"
-                )}
-                onClick={() => TextToSpeech()}
-              >
-                <div className="group-[.is-loading]:block hidden" role="status">
-                  <svg
-                    aria-hidden="true"
-                    className="w-6 text-gray-200 animate-spin dark:text-gray-600 fill-success"
-                    viewBox="0 0 100 101"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
+      {width <= 1200 && (
+        <div className={clsx("ezs-navbars-mobile", isShowMobile && "show")}>
+          <div className="ezs-navbar-mobile">
+            <ul className="ezs-navbars">
+              {MenuList &&
+                MenuList.map((item, index) => (
+                  <li
+                    className={clsx(
+                      IndexShow === item.TitleKey && "menu-item-open"
+                    )}
+                    key={index}
                   >
-                    <path
-                      d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                      fill="currentColor"
-                    />
-                    <path
-                      d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                      fill="currentFill"
-                    />
-                  </svg>
-                  <span className="sr-only">Loading...</span>
-                </div>
-                <PlayIcon className="w-6 group-[.not-loading]:block hidden" />
-              </button>
-            ) : (
-              <></>
-            )}
-
-            <div
-              className="w-[50px] h-[50px] flex items-center justify-center bg-[#ecf2ff] text-primary rounded cursor-pointer"
-              onClick={onRefeching}
-            >
-              <ArrowPathIcon className="w-6" />
-            </div>
-            <div className="w-[150px]">
-              <InputDatePicker
-                //popperPlacement='top-start'
-                placeholderText="Chọn ngày"
-                autoComplete="off"
-                onChange={(e) =>
-                  setFilters((prevState) => ({
-                    ...prevState,
-                    CrDate: e,
-                  }))
-                }
-                selected={filters.CrDate ? new Date(filters.CrDate) : null}
-                dateFormat="dd/MM/yyyy"
-              />
-            </div>
-            <SelectStocks
-              isMulti
-              isClearable={true}
-              className="select-control w-[300px]"
-              value={filters.StockID}
-              onChange={(val) => {
-                setFilters((prevState) => ({
-                  ...prevState,
-                  StockID: val ? val.map((x) => x.value) : [],
-                }));
-              }}
-              StockRoles={
-                bao_cao_ngay_tong_quan?.hasRight
-                  ? bao_cao_ngay_tong_quan?.StockRoles
-                  : report.StockRoles
-              }
-            />
+                    <NavLink to={item.Href}>
+                      <i className={item.IconClass}></i>
+                      <span>{item.Title}</span>
+                    </NavLink>
+                    {item.Children && item.Children.length > 0 && (
+                      <div
+                        className="btn-down"
+                        onClick={() => OpenSubmenu(item.TitleKey)}
+                      >
+                        <i className="fa-solid fa-chevron-down icon-down"></i>
+                      </div>
+                    )}
+                    {item.Children && item.Children.length > 0 && (
+                      <div className="ezs-navbar__sub">
+                        <ul>
+                          {item.Children.map((sub, i) => (
+                            <li key={i}>
+                              <NavLink to={sub.Href}>
+                                <i className="menu-bullet menu-bullet-dot">
+                                  <span></span>
+                                </i>
+                                <span className="menu-text">{sub.Title}</span>
+                              </NavLink>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </li>
+                ))}
+            </ul>
           </div>
-          <div className="flex gap-2 lg:hidden">
-            {GlobalConfig?.Admin?.TextToSpeech && (
-              <button
-                disabled={
-                  Store.isLoadingCustomers ||
-                  Store.isLoadingIncomes ||
-                  Store.isLoadingMembers ||
-                  Store.isLoadingSells ||
-                  Store.isLoadingServices ||
-                  textSpeechMutation?.isPending
-                }
-                type="button"
-                className={clsx(
-                  "w-10 h-10 flex items-center justify-center bg-[#C9F7F5] text-success rounded cursor-pointer group",
-                  Store.isLoadingCustomers ||
-                    Store.isLoadingIncomes ||
-                    Store.isLoadingMembers ||
-                    Store.isLoadingSells ||
-                    Store.isLoadingServices ||
-                    textSpeechMutation?.isPending
-                    ? "is-loading"
-                    : "not-loading"
-                )}
-                onClick={() => TextToSpeech()}
-              >
-                <div className="group-[.is-loading]:block hidden" role="status">
-                  <svg
-                    aria-hidden="true"
-                    className="w-4 text-gray-200 animate-spin dark:text-gray-600 fill-success"
-                    viewBox="0 0 100 101"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                      fill="currentColor"
-                    />
-                    <path
-                      d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                      fill="currentFill"
-                    />
-                  </svg>
-                  <span className="sr-only">Loading...</span>
-                </div>
-                <PlayIcon className="w-5 group-[.not-loading]:block hidden" />
-              </button>
-            )}
+          <div
+            className="navbar-overlay"
+            onClick={() => setIsShowMobile(!isShowMobile)}
+          ></div>
+        </div>
+      )}
+      <div className="flex flex-col h-full">
+        <div className="bg-white shadow-[0_10px_30px_0_rgba(82,63,105,.08)]">
+          {width > 1200 && (
+            <div className="px-4 border-b xl:px-6 h-[55px]">
+              <ul className="flex ezs-navbar">
+                {MenuList &&
+                  MenuList.map((item, index) => (
+                    <li key={index}>
+                      {window.isApp ? (
+                        <NavLink
+                          className={clsx(
+                            item.Href ===
+                              "/admin/?mdl20=R23&act20=index#rp:/bao-cao-ngay" &&
+                              "active"
+                          )}
+                          to={item.Href}
+                        >
+                          <i className={item.IconClass}></i>
+                          <span>{item.Title}</span>
+                          {item.Children && item.Children.length > 0 && (
+                            <i className="fa-solid fa-chevron-down icon-down"></i>
+                          )}
+                        </NavLink>
+                      ) : (
+                        <a
+                          className={clsx(
+                            item.Href ===
+                              "/admin/?mdl20=R23&act20=index#rp:/bao-cao-ngay" &&
+                              "active"
+                          )}
+                          href="#"
+                          onClick={() => (window.top.location.href = item.Href)}
+                        >
+                          <i className={item.IconClass}></i>
+                          <span>{item.Title}</span>
+                          {item.Children && item.Children.length > 0 && (
+                            <i className="fa-solid fa-chevron-down icon-down"></i>
+                          )}
+                        </a>
+                      )}
 
-            <PickerFilterReport
-              onSubmits={(values) => {
-                setFilters((prevState) => ({
-                  ...prevState,
-                  CrDate: values.CrDate,
-                  StockID: values.StockID,
-                }));
-              }}
-            >
-              {({ open }) => (
+                      {item.Children &&
+                        item.Children.filter((x) => !x.hidden).length > 0 && (
+                          <div className="ezs-navbar__sub">
+                            <ul>
+                              {item.Children.filter((x) => !x.hidden).map(
+                                (sub, i) => (
+                                  <li key={i}>
+                                    {window.isApp ? (
+                                      <NavLink
+                                        className={clsx(
+                                          sub.Href ===
+                                            "/admin/?mdl20=R23&act20=index#rp:/bao-cao-ngay/tong-quan" &&
+                                            "active"
+                                        )}
+                                        to={
+                                          sub.Href ===
+                                          "/admin/?mdl20=R23&act20=index#rp:/bao-cao-ngay/tong-quan"
+                                            ? "/admin/?mdl20=R23&act20=daily"
+                                            : sub.Href
+                                        }
+                                      >
+                                        {sub.Title}
+                                      </NavLink>
+                                    ) : (
+                                      <a
+                                        href="#"
+                                        className={clsx(
+                                          sub.Href ===
+                                            "/admin/?mdl20=R23&act20=index#rp:/bao-cao-ngay/tong-quan" &&
+                                            "active"
+                                        )}
+                                        onClick={() =>
+                                          (window.top.location.href =
+                                            sub.Href ===
+                                            "/admin/?mdl20=R23&act20=index#rp:/bao-cao-ngay/tong-quan"
+                                              ? "/admin/?mdl20=R23&act20=daily"
+                                              : sub.Href)
+                                        }
+                                      >
+                                        {sub.Title}
+                                      </a>
+                                    )}
+                                  </li>
+                                )
+                              )}
+                            </ul>
+                          </div>
+                        )}
+                    </li>
+                  ))}
+              </ul>
+            </div>
+          )}
+
+          <div className="px-4 py-2 xl:px-6">
+            <div className="flex items-center justify-between">
+              <div className="text-xl font-semibold lg:text-2xl">
+                Báo cáo tổng quan
+              </div>
+              <div className="hidden gap-2 lg:flex">
+                {GlobalConfig?.Admin?.TextToSpeech ? (
+                  <button
+                    disabled={
+                      Store.isLoadingCustomers ||
+                      Store.isLoadingIncomes ||
+                      Store.isLoadingMembers ||
+                      Store.isLoadingSells ||
+                      Store.isLoadingServices ||
+                      Store.isLoadingSellsChart ||
+                      textSpeechMutation?.isPending
+                    }
+                    type="button"
+                    className={clsx(
+                      "w-[50px] h-[50px] flex items-center justify-center bg-[#C9F7F5] text-success rounded cursor-pointer disabled:opacity-80 group",
+                      Store.isLoadingCustomers ||
+                        Store.isLoadingIncomes ||
+                        Store.isLoadingMembers ||
+                        Store.isLoadingSells ||
+                        Store.isLoadingServices ||
+                        Store.isLoadingSellsChart ||
+                        textSpeechMutation?.isPending
+                        ? "is-loading"
+                        : "not-loading"
+                    )}
+                    onClick={() => TextToSpeech()}
+                  >
+                    <div
+                      className="group-[.is-loading]:block hidden"
+                      role="status"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        className="w-6 text-gray-200 animate-spin dark:text-gray-600 fill-success"
+                        viewBox="0 0 100 101"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                          fill="currentColor"
+                        />
+                        <path
+                          d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                          fill="currentFill"
+                        />
+                      </svg>
+                      <span className="sr-only">Loading...</span>
+                    </div>
+                    <PlayIcon className="w-6 group-[.not-loading]:block hidden" />
+                  </button>
+                ) : (
+                  <></>
+                )}
+
                 <div
-                  className="flex items-center justify-center w-10 h-10 bg-[#F3F6F9] rounded"
-                  onClick={open}
+                  className="w-[50px] h-[50px] flex items-center justify-center bg-[#ecf2ff] text-primary rounded cursor-pointer"
+                  onClick={onRefeching}
                 >
-                  <AdjustmentsVerticalIcon className="w-6" />
+                  <ArrowPathIcon className="w-6" />
                 </div>
-              )}
-            </PickerFilterReport>
+                <div className="w-[150px]">
+                  <InputDatePicker
+                    //popperPlacement='top-start'
+                    placeholderText="Chọn ngày"
+                    autoComplete="off"
+                    onChange={(e) =>
+                      setFilters((prevState) => ({
+                        ...prevState,
+                        CrDate: e,
+                      }))
+                    }
+                    selected={filters.CrDate ? new Date(filters.CrDate) : null}
+                    dateFormat="dd/MM/yyyy"
+                  />
+                </div>
+                <SelectStocks
+                  isMulti
+                  isClearable={true}
+                  className="select-control w-[300px]"
+                  value={filters.StockID}
+                  onChange={(val) => {
+                    setFilters((prevState) => ({
+                      ...prevState,
+                      StockID: val ? val.map((x) => x.value) : [],
+                    }));
+                  }}
+                  StockRoles={
+                    bao_cao_ngay_tong_quan?.hasRight
+                      ? bao_cao_ngay_tong_quan?.StockRoles
+                      : report.StockRoles
+                  }
+                />
+                {width <= 1200 && (
+                  <div
+                    className="flex items-center justify-center w-[50px] h-[50px] bg-[#6d757d] text-white rounded"
+                    onClick={() => setIsShowMobile(true)}
+                  >
+                    <i className="fa-solid fa-bars text-[25px] mt-[4px]" />
+                  </div>
+                )}
+              </div>
+              <div className="flex gap-2 lg:hidden">
+                {GlobalConfig?.Admin?.TextToSpeech && (
+                  <button
+                    disabled={
+                      Store.isLoadingCustomers ||
+                      Store.isLoadingIncomes ||
+                      Store.isLoadingMembers ||
+                      Store.isLoadingSells ||
+                      Store.isLoadingServices ||
+                      Store.isLoadingSellsChart ||
+                      textSpeechMutation?.isPending
+                    }
+                    type="button"
+                    className={clsx(
+                      "w-10 h-10 flex items-center justify-center bg-[#C9F7F5] text-success rounded cursor-pointer group",
+                      Store.isLoadingCustomers ||
+                        Store.isLoadingIncomes ||
+                        Store.isLoadingMembers ||
+                        Store.isLoadingSells ||
+                        Store.isLoadingServices ||
+                        Store.isLoadingSellsChart ||
+                        textSpeechMutation?.isPending
+                        ? "is-loading"
+                        : "not-loading"
+                    )}
+                    onClick={() => TextToSpeech()}
+                  >
+                    <div
+                      className="group-[.is-loading]:block hidden"
+                      role="status"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        className="w-4 text-gray-200 animate-spin dark:text-gray-600 fill-success"
+                        viewBox="0 0 100 101"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                          fill="currentColor"
+                        />
+                        <path
+                          d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                          fill="currentFill"
+                        />
+                      </svg>
+                      <span className="sr-only">Loading...</span>
+                    </div>
+                    <PlayIcon className="w-5 group-[.not-loading]:block hidden" />
+                  </button>
+                )}
+
+                <PickerFilterReport
+                  onSubmits={(values) => {
+                    setFilters((prevState) => ({
+                      ...prevState,
+                      CrDate: values.CrDate,
+                      StockID: values.StockID,
+                    }));
+                  }}
+                >
+                  {({ open }) => (
+                    <div
+                      className="flex items-center justify-center w-10 h-10 bg-[#F3F6F9] rounded"
+                      onClick={open}
+                    >
+                      <AdjustmentsVerticalIcon className="w-6" />
+                    </div>
+                  )}
+                </PickerFilterReport>
+                <div
+                  className="flex items-center justify-center w-[40px] h-[40px] bg-[#6d757d] text-white rounded"
+                  onClick={() => setIsShowMobile(true)}
+                >
+                  <i className="fa-solid fa-bars text-[18px] mt-[4px]" />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-        <div className="flex flex-col gap-4 lg:grid lg:grid-cols-6 xl:gap-6">
-          <Customers filters={filters} />
-          <Sells filters={filters} />
-          <Services filters={filters} />
-          <Incomes filters={filters} />
-          <Members filters={filters} />
+        <div className="p-4 overflow-auto xl:p-6 grow">
+          <div className="flex flex-col gap-4 lg:grid lg:grid-cols-6 xl:gap-6">
+            <Customers filters={filters} />
+            <Sells filters={filters} />
+            <Services filters={filters} />
+            <Incomes filters={filters} />
+            <Members filters={filters} />
+          </div>
         </div>
       </div>
       {currentMusic.src && <Player />}

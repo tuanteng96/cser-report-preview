@@ -110,6 +110,7 @@ function PickerViewsSells({ children, filters }) {
     setStore((prevState) => ({
       ...prevState,
       SellsChart: data,
+      isLoadingSellsChart: false,
     }));
   }, [data]);
 

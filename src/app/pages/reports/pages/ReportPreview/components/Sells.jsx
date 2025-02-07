@@ -312,7 +312,7 @@ function Sells({ filters }) {
 
   return (
     <>
-      <div className="col-span-2 p-6 rounded shadow-xxl">
+      <div className="col-span-2 p-6 bg-white rounded shadow-xxl">
         <div className="mb-6 text-xl font-semibold">Bán hàng</div>
 
         <div ref={elRef}>
@@ -555,7 +555,7 @@ function Sells({ filters }) {
           )}
         </div>
       </div>
-      <div className="flex flex-col col-span-4 p-6 rounded shadow-xxl">
+      <div className="flex flex-col col-span-4 p-6 bg-white rounded shadow-xxl">
         <div className="flex items-center justify-between mb-5">
           <div className="text-xl font-semibold">Biểu đồ bán hàng</div>
           <div className="flex">

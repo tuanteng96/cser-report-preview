@@ -136,7 +136,7 @@ function Incomes({ filters }) {
   }, [data]);
 
   return (
-    <div className="col-span-2 p-6 rounded shadow-xxl">
+    <div className="col-span-2 p-6 bg-white rounded shadow-xxl">
       <div className="mb-6 text-xl font-semibold">Thu Chi</div>
       {isLoading && (
         <div>

@@ -370,7 +370,7 @@ function Customers({ filters }) {
 
   return (
     <>
-      <div className="col-span-2 p-6 rounded shadow-xxl">
+      <div className="col-span-2 p-6 bg-white rounded shadow-xxl">
         <div className="mb-6 text-xl font-semibold">
           Khách hàng
         </div>
@@ -615,7 +615,7 @@ function Customers({ filters }) {
           )}
         </div>
       </div>
-      <div className="flex flex-col col-span-4 p-6 rounded shadow-xxl">
+      <div className="flex flex-col col-span-4 p-6 bg-white rounded shadow-xxl">
         <div className="mb-6 text-xl font-semibold">Biểu đồ khách hàng</div>
         <div className="grow">
           <Chart

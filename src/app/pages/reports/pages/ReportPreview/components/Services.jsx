@@ -133,7 +133,7 @@ function Services({ filters }) {
   }, [data]);
 
   return (
-    <div className="col-span-2 p-6 rounded shadow-xxl">
+    <div className="col-span-2 p-6 bg-white rounded shadow-xxl">
       <div className="flex items-center justify-between mb-6">
         <div className="text-xl font-semibold ">Dịch vụ</div>
         <PickerViewsServices filters={filters}>
