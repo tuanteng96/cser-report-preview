@@ -648,10 +648,21 @@ function ReportPreview(props) {
                     )}
                     key={index}
                   >
-                    <NavLink to={item.Href}>
-                      <i className={item.IconClass}></i>
-                      <span>{item.Title}</span>
-                    </NavLink>
+                    {window.isApp ? (
+                      <NavLink to={item.Href}>
+                        <i className={item.IconClass}></i>
+                        <span>{item.Title}</span>
+                      </NavLink>
+                    ) : (
+                      <a
+                        href="#"
+                        onClick={() => (window.top.location.href = item.Href)}
+                      >
+                        <i className={item.IconClass}></i>
+                        <span>{item.Title}</span>
+                      </a>
+                    )}
+
                     {item.Children && item.Children.length > 0 && (
                       <div
                         className="btn-down"
@@ -665,12 +676,37 @@ function ReportPreview(props) {
                         <ul>
                           {item.Children.map((sub, i) => (
                             <li key={i}>
-                              <NavLink to={sub.Href}>
-                                <i className="menu-bullet menu-bullet-dot">
-                                  <span></span>
-                                </i>
-                                <span className="menu-text">{sub.Title}</span>
-                              </NavLink>
+                              {window.isApp ? (
+                                <NavLink
+                                  to={
+                                    sub.Href ===
+                                    "/admin/?mdl20=R23&act20=index#rp:/bao-cao-ngay/tong-quan"
+                                      ? "/admin/?mdl20=R23&act20=daily"
+                                      : sub.Href
+                                  }
+                                >
+                                  <i className="menu-bullet menu-bullet-dot">
+                                    <span></span>
+                                  </i>
+                                  <span className="menu-text">{sub.Title}</span>
+                                </NavLink>
+                              ) : (
+                                <a
+                                  href="#"
+                                  onClick={() =>
+                                    (window.top.location.href =
+                                      sub.Href ===
+                                      "/admin/?mdl20=R23&act20=index#rp:/bao-cao-ngay/tong-quan"
+                                        ? "/admin/?mdl20=R23&act20=daily"
+                                        : sub.Href)
+                                  }
+                                >
+                                  <i className="menu-bullet menu-bullet-dot">
+                                    <span></span>
+                                  </i>
+                                  <span className="menu-text">{sub.Title}</span>
+                                </a>
+                              )}
                             </li>
                           ))}
                         </ul>
@@ -959,12 +995,14 @@ function ReportPreview(props) {
                     </div>
                   )}
                 </PickerFilterReport>
-                <div
-                  className="flex items-center justify-center w-[40px] h-[40px] bg-[#6d757d] text-white rounded"
-                  onClick={() => setIsShowMobile(true)}
-                >
-                  <i className="fa-solid fa-bars text-[18px] mt-[4px]" />
-                </div>
+                {!window.isApp && (
+                  <div
+                    className="flex items-center justify-center w-[40px] h-[40px] bg-[#6d757d] text-white rounded"
+                    onClick={() => setIsShowMobile(true)}
+                  >
+                    <i className="fa-solid fa-bars text-[18px] mt-[4px]" />
+                  </div>
+                )}
               </div>
             </div>
           </div>
