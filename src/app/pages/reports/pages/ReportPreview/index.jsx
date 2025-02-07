@@ -656,7 +656,12 @@ function ReportPreview(props) {
                     ) : (
                       <a
                         href="#"
-                        onClick={() => (window.top.location.href = item.Href)}
+                        onClick={() =>
+                          (window.top.location.href =
+                            item.TitleKey === "BAO_CAO_NGAY"
+                              ? "/admin/?mdl20=R23&act20=daily"
+                              : sub.Href)
+                        }
                       >
                         <i className={item.IconClass}></i>
                         <span>{item.Title}</span>
@@ -737,7 +742,7 @@ function ReportPreview(props) {
                               "/admin/?mdl20=R23&act20=index#rp:/bao-cao-ngay" &&
                               "active"
                           )}
-                          to={item.Href}
+                          to={sub.Href}
                         >
                           <i className={item.IconClass}></i>
                           <span>{item.Title}</span>
@@ -753,7 +758,12 @@ function ReportPreview(props) {
                               "active"
                           )}
                           href="#"
-                          onClick={() => (window.top.location.href = item.Href)}
+                          onClick={() =>
+                            (window.top.location.href =
+                              item.TitleKey === "BAO_CAO_NGAY"
+                                ? "/admin/?mdl20=R23&act20=daily"
+                                : sub.Href)
+                          }
                         >
                           <i className={item.IconClass}></i>
                           <span>{item.Title}</span>
