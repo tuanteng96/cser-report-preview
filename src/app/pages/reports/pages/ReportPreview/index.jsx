@@ -5,6 +5,7 @@ import {
   Incomes,
   Members,
   PickerFilterReport,
+  PickerViewStock,
   Player,
   Sells,
   Services,
@@ -16,6 +17,7 @@ import {
   AdjustmentsVerticalIcon,
   ArrowPathIcon,
   Bars3Icon,
+  ChevronDownIcon,
   PlayIcon,
 } from "@heroicons/react/24/outline";
 import { useRoles } from "src/app/_ezs/hooks/useRoles";
@@ -27,6 +29,7 @@ import axios from "axios";
 import clsx from "clsx";
 import { useWindowSize } from "src/app/_ezs/hooks/useWindowSize";
 import { NavLink } from "react-router-dom";
+import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 
 const hasRouter = () => {
   return "/admin/?mdl20=R23&act20=index#rp:";
@@ -829,9 +832,37 @@ function ReportPreview(props) {
 
           <div className="px-4 py-2 xl:px-6">
             <div className="flex items-center justify-between">
-              <div className="text-xl font-semibold lg:text-2xl">
-                Báo cáo tổng quan
-              </div>
+              <Menu>
+                <MenuButton>
+                  <div className="flex items-center text-xl font-semibold lg:text-2xl">
+                    Báo cáo tổng quan
+                    <ChevronDownIcon className="w-5 ml-2" />
+                  </div>
+                </MenuButton>
+                <MenuItems
+                  className="px-0 py-1 bg-white border-0 rounded shadow-lg"
+                  anchor="bottom"
+                >
+                  <MenuItem>
+                    {({ close }) => (
+                      <PickerViewStock onClose={close}>
+                        {({ open }) => (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              open();
+                            }}
+                            className="flex items-center px-5 py-2.5 text-[15px] min-w-[200px] hover:bg-[#F4F6FA] hover:text-primary font-inter transition cursor-pointer font-medium text-site-color"
+                          >
+                            Theo cơ sở
+                          </button>
+                        )}
+                      </PickerViewStock>
+                    )}
+                  </MenuItem>
+                </MenuItems>
+              </Menu>
+
               <div className="hidden gap-2 lg:flex">
                 {GlobalConfig?.Admin?.TextToSpeech ? (
                   <button

@@ -16,7 +16,7 @@
         "@fullcalendar/resource": "^6.1.14",
         "@fullcalendar/resource-timeline": "^6.1.14",
         "@fullcalendar/scrollgrid": "^6.1.15",
-        "@headlessui/react": "^2.1.2",
+        "@headlessui/react": "^2.2.0",
         "@heroicons/react": "^2.1.4",
         "@hookform/resolvers": "^3.9.0",
         "@tanstack/react-query": "^5.50.1",

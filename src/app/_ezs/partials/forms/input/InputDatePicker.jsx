@@ -1,21 +1,27 @@
-import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
-import clsx from 'clsx'
-import React from 'react'
-import DatePicker from 'react-datepicker'
-import Portal from 'react-overlays/cjs/Portal'
+import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
+import clsx from "clsx";
+import React from "react";
+import DatePicker from "react-datepicker";
+import Portal from "react-overlays/cjs/Portal";
 
 const CalendarContainer = ({ children }) => {
-  const el = document.getElementById('calendar-portal')
+  const el = document.getElementById("calendar-portal");
 
-  return <Portal container={el}>{children}</Portal>
-}
+  return <Portal container={el}>{children}</Portal>;
+};
 
-const InputDatePicker = ({ errorMessage, errorMessageForce, ...props }) => {
+const InputDatePicker = ({
+  errorMessage,
+  errorMessageForce,
+  className,
+  ...props
+}) => {
   return (
     <>
       <div className="relative">
         <DatePicker
           className={clsx(
+            className,
             "w-full px-3 py-3 transition bg-white border rounded outline-none disabled:bg-gray-200 disabled:border-gray-200",
             errorMessageForce
               ? "border-danger"
@@ -36,6 +42,6 @@ const InputDatePicker = ({ errorMessage, errorMessageForce, ...props }) => {
       )}
     </>
   );
-}
+};
 
-export { InputDatePicker }
+export { InputDatePicker };
