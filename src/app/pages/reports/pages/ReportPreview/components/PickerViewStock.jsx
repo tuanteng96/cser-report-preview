@@ -1,7 +1,6 @@
 import React, {
   forwardRef,
   Fragment,
-  useEffect,
   useMemo,
   useState,
 } from "react";
@@ -9,7 +8,7 @@ import { FloatingPortal } from "@floating-ui/react";
 import { Dialog } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { AnimatePresence, LayoutGroup, m } from "framer-motion";
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useRoles } from "src/app/_ezs/hooks/useRoles";
 import moment from "moment";
 import ReactBaseTable from "src/app/_ezs/partials/table";
@@ -29,8 +28,8 @@ const PickerViewStock = forwardRef((props, ref) => {
   let [visible, setVisible] = useState(false);
   const [filters, setFilters] = useState({
     StockID: [],
-    DateStart: moment().startOf("month").toDate(),
-    DateEnd: moment().endOf("month").toDate(),
+    DateStart: moment().toDate(),
+    DateEnd: moment().toDate(),
     Pi: 1,
     Ps: 100,
   });
