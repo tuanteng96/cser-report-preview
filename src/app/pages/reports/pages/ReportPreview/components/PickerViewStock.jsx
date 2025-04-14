@@ -1,9 +1,4 @@
-import React, {
-  forwardRef,
-  Fragment,
-  useMemo,
-  useState,
-} from "react";
+import React, { forwardRef, Fragment, useMemo, useState } from "react";
 import { FloatingPortal } from "@floating-ui/react";
 import { Dialog } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
@@ -325,6 +320,7 @@ const PickerViewStock = forwardRef((props, ref) => {
                             </div>
                           </form>
                         </Dialog.Title>
+
                         <ReactBaseTable
                           fixed
                           wrapClassName="grow p-5"
@@ -383,10 +379,72 @@ const PickerViewStock = forwardRef((props, ref) => {
                           <XMarkIcon className="w-6 md:w-8" />
                         </div>
                       </Dialog.Title>
+                      <form
+                        onSubmit={handleSubmit(onSubmit)}
+                        className="flex items-center px-4 pt-4"
+                        autoComplete="off"
+                      >
+                        <div className="flex gap-2">
+                          <div className="w-[125px]">
+                            <Controller
+                              name="DateStart"
+                              control={control}
+                              render={({
+                                field: { ref, ...field },
+                                fieldState,
+                              }) => (
+                                <InputDatePicker
+                                  className="!py-2.5"
+                                  //popperPlacement='top-start'
+                                  placeholderText="Từ ngày"
+                                  autoComplete="off"
+                                  onChange={field.onChange}
+                                  selected={
+                                    field.value ? new Date(field.value) : null
+                                  }
+                                  dateFormat="dd/MM/yyyy"
+                                />
+                              )}
+                            />
+                          </div>
+                          <div className="flex items-center">-</div>
+                          <div className="w-[125px]">
+                            <Controller
+                              name="DateEnd"
+                              control={control}
+                              render={({
+                                field: { ref, ...field },
+                                fieldState,
+                              }) => (
+                                <InputDatePicker
+                                  className="!py-2.5"
+                                  //popperPlacement='top-start'
+                                  placeholderText="Đến ngày"
+                                  autoComplete="off"
+                                  onChange={field.onChange}
+                                  selected={
+                                    field.value ? new Date(field.value) : null
+                                  }
+                                  dateFormat="dd/MM/yyyy"
+                                />
+                              )}
+                            />
+                          </div>
+                          <Button
+                            hideText={isLoading}
+                            disabled={isLoading}
+                            loading={isLoading}
+                            type="submit"
+                            className="h-[46px] flex items-center justify-center bg-primary text-white px-4 rounded cursor-pointer relative"
+                          >
+                            Lọc
+                          </Button>
+                        </div>
+                      </form>
                       <SpinnerComponent
                         bgClassName="bg-white"
-                        top="top-[61px]"
-                        height="h-[calc(100%-61px)]"
+                        top="top-[125px]"
+                        height="h-[calc(100%-125px)]"
                         loading={isLoading}
                       />
                       <div className="p-4 overflow-auto grow">
