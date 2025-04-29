@@ -65,7 +65,7 @@ const getHasRole = (Roles, CrStocks) => {
     : [];
 
   if (hasRight && !Roles.IsAllStock) {
-    hasRight = StockRoles.some((x) => x.ID === CrStocks.ID);
+    hasRight = StockRoles.some((x) => x.ID === CrStocks?.ID);
   }
   return {
     hasRight,

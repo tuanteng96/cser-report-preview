@@ -1,4 +1,10 @@
-import React, { forwardRef, Fragment, useMemo, useState } from "react";
+import React, {
+  forwardRef,
+  Fragment,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { FloatingPortal } from "@floating-ui/react";
 import { Dialog } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
@@ -21,12 +27,19 @@ const PickerViewStock = forwardRef((props, ref) => {
   let { children, onClose, ...rest } = props;
 
   let [visible, setVisible] = useState(false);
+  let [Lists, setLists] = useState([]);
   const [filters, setFilters] = useState({
     StockID: [],
     DateStart: moment().toDate(),
     DateEnd: moment().toDate(),
     Pi: 1,
     Ps: 100,
+  });
+  let [sortState, setSortState] = useState({
+    Cash: "asc",
+    MM: "asc",
+    MMbook: "asc",
+    Os: "asc",
   });
   const { report, bao_cao_ngay_tong_quan } = useRoles([
     "bao_cao_ngay_tong_quan",
@@ -43,7 +56,7 @@ const PickerViewStock = forwardRef((props, ref) => {
   });
 
   const { isLoading, data } = useQuery({
-    queryKey: ["ViewStock", filters],
+    queryKey: ["ViewStock", { ...filters }],
     queryFn: async () => {
       let Stocks = bao_cao_ngay_tong_quan?.hasRight
         ? bao_cao_ngay_tong_quan?.StockRoles
@@ -66,6 +79,10 @@ const PickerViewStock = forwardRef((props, ref) => {
     },
     enabled: visible,
   });
+
+  useEffect(() => {
+    setLists(data);
+  }, [data]);
 
   const columns = useMemo(
     () => {
@@ -111,7 +128,7 @@ const PickerViewStock = forwardRef((props, ref) => {
             </div>
           ),
           width: 250,
-          sortable: false,
+          sortable: true,
         },
         {
           key: "MM",
@@ -139,7 +156,7 @@ const PickerViewStock = forwardRef((props, ref) => {
             </div>
           ),
           width: 250,
-          sortable: false,
+          sortable: true,
         },
         {
           key: "MMbook",
@@ -167,7 +184,7 @@ const PickerViewStock = forwardRef((props, ref) => {
             </div>
           ),
           width: 200,
-          sortable: false,
+          sortable: true,
         },
         {
           key: "Os",
@@ -195,7 +212,7 @@ const PickerViewStock = forwardRef((props, ref) => {
             </div>
           ),
           width: 200,
-          sortable: false,
+          sortable: true,
         },
       ];
     },
@@ -206,6 +223,21 @@ const PickerViewStock = forwardRef((props, ref) => {
   const onHide = () => {
     setVisible(false);
     onClose && onClose();
+  };
+
+  const onColumnSort = ({ key, order }) => {
+    let newItems = [...(Lists || [])];
+    if (order === "desc") {
+      newItems = newItems.sort((a, b) => a[key] - b[key]);
+    } else {
+      newItems = newItems.sort((a, b) => b[key] - a[key]);
+    }
+
+    setLists(newItems)
+
+    let newSortState = JSON.parse(JSON.stringify(sortState));
+    newSortState[key] = order;
+    setSortState(newSortState);
   };
 
   const onSubmit = (values) => {
@@ -326,11 +358,13 @@ const PickerViewStock = forwardRef((props, ref) => {
                           wrapClassName="grow p-5"
                           rowKey="StockID"
                           columns={columns}
-                          data={data || []}
+                          data={Lists || []}
                           rowHeight={70}
                           isPreviousData={false}
                           loading={isLoading}
                           footerClass="flex items-center justify-between w-full px-5 pb-5"
+                          sortState={sortState}
+                          onColumnSort={onColumnSort}
                         />
                       </Dialog.Panel>
                     </m.div>

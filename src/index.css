@@ -403,6 +403,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
     display: inline-block;
   }
 }
+
 .ezs-navbar > li > a i.icon-down {
   padding-left: 7px;
   font-size: 11px;
@@ -732,5 +733,13 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   }
   to {
     opacity: 0;
+  }
+}
+
+
+@media (max-width: 1440px) {
+  .ezs-navbar>li>a {
+    padding: .65rem 1rem;
+    font-size: 13px;
   }
 }

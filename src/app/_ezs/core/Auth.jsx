@@ -22,12 +22,12 @@ if (import.meta.env.DEV) {
       },
       {
         Title: "Cser Hà Nội",
-        ID: 11520,
+        ID: 11541,
         ParentID: 778,
       },
       {
         Title: "Cser Hồ Chí Minh",
-        ID: 11521,
+        ID: 11542,
         ParentID: 778,
       },
     ],
@@ -52,12 +52,12 @@ if (import.meta.env.DEV) {
                         stocksList: [
                           {
                             Title: "Cser Hà Nội",
-                            ID: 11520,
+                            ID: 11541,
                           },
                           {
                             Title: "Cser Hồ Chí Minh",
                             ID: 11521,
-                            ParentID: 778,
+                            ParentID: 11542,
                           },
                         ],
                         IsAllStock: false,
@@ -73,11 +73,11 @@ if (import.meta.env.DEV) {
               stocksList: [
                 {
                   Title: "Cser Hà Nội",
-                  ID: 11520,
+                  ID: 11541,
                 },
                 {
                   Title: "Cser Hồ Chí Minh",
-                  ID: 11521,
+                  ID: 11542,
                 },
               ],
             },
@@ -85,9 +85,9 @@ if (import.meta.env.DEV) {
         },
       ],
     },
-    CrStockID: 11520,
+    CrStockID: 11542,
     token:
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBdXRoMlR5cGUiOiJVc2VyRW50IiwiSUQiOiIxIiwiVG9rZW5JZCI6IjEyMjEzMzEyMjUyNyIsIm5iZiI6MTc0MjYyOTM0NSwiZXhwIjoxODI5MDI5MzQ1LCJpYXQiOjE3NDI2MjkzNDV9.a3yJEfRkP3PeJJc1PkS4zp5duj3wq-H0UNi3Tidsn-U",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBdXRoMlR5cGUiOiJVc2VyRW50IiwiSUQiOiIxIiwiVG9rZW5JZCI6IjEyMjEzMzEyMjgxOSIsIm5iZiI6MTc0NTgwNzU0NiwiZXhwIjoxODMyMjA3NTQ2LCJpYXQiOjE3NDU4MDc1NDZ9.OrsG1xLiSDVHiTN3QWL9cmSUF2COMCyi5fBVxYbEgN4",
   };
 }
 

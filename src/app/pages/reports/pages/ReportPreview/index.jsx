@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAuth } from "src/app/_ezs/core/Auth";
 import {
   Customers,
@@ -30,6 +30,8 @@ import clsx from "clsx";
 import { useWindowSize } from "src/app/_ezs/hooks/useWindowSize";
 import { NavLink } from "react-router-dom";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
+import Swal from "sweetalert2";
+import { toAbsoluteUrl } from "src/app/_ezs/utils/assetPath";
 
 const hasRouter = () => {
   return "/admin/?mdl20=R23&act20=index#rp:";
@@ -635,6 +637,27 @@ function ReportPreview(props) {
     }
   };
 
+  // useEffect(() => {
+  //   if (
+  //     bao_cao_ngay_tong_quan?.hasRight ||
+  //     (report?.hasRight && report?.IsStocks)
+  //   ) {
+  //   } else {
+  //     Swal.fire({
+  //       icon: "error",
+  //       title: "Yêu cầu quyền truy cập",
+  //       text: "Để xem được báo cáo này bạn cần có quyền truy cập từ người quản trị.",
+  //       footer: `<span class="text-danger">Yêu cầu quyền truy cập</span>`,
+  //       showCancelButton: false,
+  //       showConfirmButton: false,
+  //       allowOutsideClick: false,
+  //       customClass: {
+  //         container: "swal-quyen",
+  //       },
+  //     });
+  //   }
+  // }, [report, bao_cao_ngay_tong_quan]);
+
   return (
     <ReportContext.Provider
       value={{ Store, setStore, currentMusic, setCurrentMusic }}
@@ -833,9 +856,17 @@ function ReportPreview(props) {
           <div className="px-4 py-2 xl:px-6">
             <div className="flex items-center justify-between">
               <Menu>
-                <MenuButton>
+                <MenuButton
+                  disabled={
+                    !(
+                      bao_cao_ngay_tong_quan?.hasRight ||
+                      (report?.hasRight && report?.IsStocks)
+                    )
+                  }
+                >
                   <div className="flex items-center text-xl font-semibold lg:text-2xl">
-                    Báo cáo tổng quan
+                    <span className="hidden md:inline-block">Báo cáo tổng quan</span>
+                    <span className="md:hidden">BC tổng quan</span>
                     <ChevronDownIcon className="w-5 ml-2" />
                   </div>
                 </MenuButton>
@@ -937,6 +968,12 @@ function ReportPreview(props) {
                     }
                     selected={filters.CrDate ? new Date(filters.CrDate) : null}
                     dateFormat="dd/MM/yyyy"
+                    disabled={
+                      !(
+                        bao_cao_ngay_tong_quan?.hasRight ||
+                        (report?.hasRight && report?.IsStocks)
+                      )
+                    }
                   />
                 </div>
                 <SelectStocks
@@ -954,6 +991,12 @@ function ReportPreview(props) {
                     bao_cao_ngay_tong_quan?.hasRight
                       ? bao_cao_ngay_tong_quan?.StockRoles
                       : report.StockRoles
+                  }
+                  isDisabled={
+                    !(
+                      bao_cao_ngay_tong_quan?.hasRight ||
+                      (report?.hasRight && report?.IsStocks)
+                    )
                   }
                 />
                 {width <= 1200 && (
@@ -1048,15 +1091,39 @@ function ReportPreview(props) {
             </div>
           </div>
         </div>
-        <div className="p-4 overflow-auto xl:p-6 grow">
-          <div className="flex flex-col gap-4 lg:grid lg:grid-cols-6 xl:gap-6">
-            <Customers filters={filters} />
-            <Sells filters={filters} />
-            <Services filters={filters} />
-            <Incomes filters={filters} />
-            <Members filters={filters} />
+        {bao_cao_ngay_tong_quan?.hasRight ||
+        (report?.hasRight && report?.IsStocks) ? (
+          <div className="p-4 overflow-auto xl:p-6 grow">
+            <div className="flex flex-col gap-4 lg:grid lg:grid-cols-6 xl:gap-6">
+              <Customers filters={filters} />
+              <Sells filters={filters} />
+              <Services filters={filters} />
+              <Incomes filters={filters} />
+              <Members filters={filters} />
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className="relative grow">
+            <div className="absolute w-full max-w-2xl px-5 md:px-0 top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4">
+              <div className="flex flex-col items-center justify-center px-5 pt-12 pb-10 bg-white rounded md:pt-20 md:px-10">
+                <div className="mb-3 text-xl font-bold text-center md:text-2xl font-inter text-danger">
+                  Không có quyền truy cập!
+                </div>
+                <div className="text-center text-gray-600 md:font-semibold md:w-10/12">
+                  Bạn không có quyền để truy cập chức năng này. Vui lòng liên hệ
+                  quản trị viên cấp quyền truy cập.
+                </div>
+                <div className="max-w-[150px] md:max-w-[200px]">
+                  <img
+                    className="w-full"
+                    src={toAbsoluteUrl("images/membership.png")}
+                    alt=""
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
       {currentMusic.src && <Player />}
     </ReportContext.Provider>

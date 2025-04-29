@@ -32,6 +32,20 @@ body .swal2-html-container {
     padding: 0 20px;
     line-height: 30px;
     color: var(--swl2-desc-color);
+
+}
+
+html div:where(.swal2-container) .swal2-html-container {
+    font-size: 15px;
+    line-height: 22px;
+    padding: 0 30px;
+    margin-top: 10px;
+}
+
+div:where(.swal2-container).swal-quyen {
+    overflow-y: auto;
+    top: 55px;
+    height: calc(100% - 55px);
 }
 
 body .swal2-title {
@@ -66,6 +80,7 @@ body .swal2-styled.swal2-cancel:focus {
         font-size: 14px;
         line-height: 22px;
     }
+
     body .swal2-title {
         font-size: 20px;
     }

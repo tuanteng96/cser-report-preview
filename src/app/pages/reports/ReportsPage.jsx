@@ -11,11 +11,19 @@ function ReportsPage(props) {
     "bao_cao_ngay_tong_quan",
     "report",
   ]);
-  
+
   return (
     <>
       <Routes>
         <Route
+          index
+          element={
+            <SuspensedView>
+              <ReportPreviewPage />
+            </SuspensedView>
+          }
+        />
+        {/* <Route
           element={
             <RoleAccess
               roles={
@@ -32,7 +40,7 @@ function ReportsPage(props) {
               </SuspensedView>
             }
           />
-        </Route>
+        </Route> */}
       </Routes>
     </>
   );

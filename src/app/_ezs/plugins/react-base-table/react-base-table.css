@@ -220,8 +220,12 @@ html.dark {
     opacity: 1;
 }
 
-.BaseTable__header-cell .BaseTable__sort-indicator {
+.BaseTable__header-cell:not(.BaseTable__header-cell--sortable) .BaseTable__sort-indicator {
     display: none;
+}
+
+.BaseTable__header-cell.BaseTable__header-cell--sortable {
+    justify-content: space-between;
 }
 
 .BaseTable__header-cell--sortable:hover {
