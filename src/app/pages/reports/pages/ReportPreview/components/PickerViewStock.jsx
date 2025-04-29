@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import { FloatingPortal } from "@floating-ui/react";
 import { Dialog } from "@headlessui/react";
-import { XMarkIcon } from "@heroicons/react/24/outline";
+import { ArrowUpIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { AnimatePresence, LayoutGroup, m } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 import { useRoles } from "src/app/_ezs/hooks/useRoles";
@@ -22,6 +22,7 @@ import { InputDatePicker } from "src/app/_ezs/partials/forms";
 import { formatArray } from "src/app/_ezs/utils/formatArray";
 import { Controller, useForm } from "react-hook-form";
 import { Button } from "src/app/_ezs/partials/button";
+import clsx from "clsx";
 
 const PickerViewStock = forwardRef((props, ref) => {
   let { children, onClose, ...rest } = props;
@@ -233,7 +234,7 @@ const PickerViewStock = forwardRef((props, ref) => {
       newItems = newItems.sort((a, b) => b[key] - a[key]);
     }
 
-    setLists(newItems)
+    setLists(newItems);
 
     let newSortState = JSON.parse(JSON.stringify(sortState));
     newSortState[key] = order;
@@ -415,7 +416,7 @@ const PickerViewStock = forwardRef((props, ref) => {
                       </Dialog.Title>
                       <form
                         onSubmit={handleSubmit(onSubmit)}
-                        className="flex items-center px-4 pt-4"
+                        className="flex flex-col p-4"
                         autoComplete="off"
                       >
                         <div className="flex gap-2">
@@ -474,6 +475,48 @@ const PickerViewStock = forwardRef((props, ref) => {
                             Lọc
                           </Button>
                         </div>
+                        <div className="text-[13px] mt-2 gap-2.5 flex">
+                          {[
+                            {
+                              key: "Cash",
+                              Title: "TM/CK/QT",
+                            },
+                            {
+                              key: "MM",
+                              Title: "Ví/Thẻ tiền",
+                            },
+                            {
+                              key: "MMbook",
+                              Title: "Đặt lịch",
+                            },
+                            {
+                              key: "Os",
+                              Title: "Dịch vụ",
+                            },
+                          ].map((sort, i) => (
+                            <span
+                              className="flex text-primary"
+                              key={i}
+                              onClick={() =>
+                                onColumnSort({
+                                  key: sort.key,
+                                  order:
+                                    sortState[sort.key] === "desc"
+                                      ? "asc"
+                                      : "desc",
+                                })
+                              }
+                            >
+                              {sort.Title}
+                              <ArrowUpIcon
+                                className={clsx(
+                                  "w-3.5 ml-px transition-all",
+                                  sortState[sort.key] === "desc" && "rotate-180"
+                                )}
+                              />
+                            </span>
+                          ))}
+                        </div>
                       </form>
                       <SpinnerComponent
                         bgClassName="bg-white"
@@ -481,10 +524,10 @@ const PickerViewStock = forwardRef((props, ref) => {
                         height="h-[calc(100%-125px)]"
                         loading={isLoading}
                       />
-                      <div className="p-4 overflow-auto grow">
-                        {data &&
-                          data.length > 0 &&
-                          data.map((row, index) => (
+                      <div className="px-4 pb-4 overflow-auto grow">
+                        {Lists &&
+                          Lists.length > 0 &&
+                          Lists.map((row, index) => (
                             <div
                               className="mb-4 border rounded last:mb-0 shadow-xxl"
                               key={index}
@@ -534,7 +577,7 @@ const PickerViewStock = forwardRef((props, ref) => {
                               )}
                             </div>
                           ))}
-                        {(!data || data.length === 0) && (
+                        {(!Lists || Lists.length === 0) && (
                           <div className="flex flex-col items-center justify-center h-full dark:bg-dark-aside">
                             <svg
                               className="w-16"
