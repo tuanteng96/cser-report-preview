@@ -385,6 +385,8 @@ function ReportPreview(props) {
   ]);
   const [IndexShow, setIndexShow] = useState("BAO_CAO_NGAY");
 
+  window.ReportMenus = MenuList
+
   const textSpeechMutation = useMutation({
     mutationFn: async (body) => {
       let data = await ConfigAPI.urlAction(body);
