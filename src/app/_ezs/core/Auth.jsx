@@ -27,7 +27,7 @@ if (import.meta.env.DEV) {
       },
       {
         Title: "Cser Hồ Chí Minh",
-        ID: 11542,
+        ID: 11557,
         ParentID: 778,
       },
     ],
@@ -57,7 +57,7 @@ if (import.meta.env.DEV) {
                           {
                             Title: "Cser Hồ Chí Minh",
                             ID: 11521,
-                            ParentID: 11542,
+                            ParentID: 11557,
                           },
                         ],
                         IsAllStock: false,
@@ -77,7 +77,7 @@ if (import.meta.env.DEV) {
                 },
                 {
                   Title: "Cser Hồ Chí Minh",
-                  ID: 11542,
+                  ID: 11557,
                 },
               ],
             },
@@ -85,9 +85,9 @@ if (import.meta.env.DEV) {
         },
       ],
     },
-    CrStockID: 11542,
+    CrStockID: 11557,
     token:
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBdXRoMlR5cGUiOiJVc2VyRW50IiwiSUQiOiIxIiwiVG9rZW5JZCI6IjEyMjEzMzEyMjgxOSIsIm5iZiI6MTc0NTgwNzU0NiwiZXhwIjoxODMyMjA3NTQ2LCJpYXQiOjE3NDU4MDc1NDZ9.OrsG1xLiSDVHiTN3QWL9cmSUF2COMCyi5fBVxYbEgN4",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBdXRoMlR5cGUiOiJVc2VyRW50IiwiSUQiOiIxIiwiVG9rZW5JZCI6IjE5ODExMjAzMTQiLCJuYmYiOjE3NTE5MDYxMzYsImV4cCI6MTgzODMwNjEzNiwiaWF0IjoxNzUxOTA2MTM2fQ.b97rfCw_Ba2cW31HBgQb6RGDVgEyI9mshvv7Xk9JbJo",
   };
 }
 

@@ -45,10 +45,13 @@ export const formatArray = {
     array.splice(newIndex, 0, array.splice(oldIndex, 1)[0]);
     return array;
   },
-  sumTotal: (array, key) => array.reduce((a, b) => a + (b[key] || 0), 0),
+  sumTotal: (array, key) => {
+    if(!array) return 0
+    return array.reduce((a, b) => a + (b[key] || 0), 0)
+  },
   sumTotalNested: ({ Items, key, name }) => {
     let total = 0;
-
+    if(!Items) return 0
     for (let item of Items) {
       if (item.Title && item.Title === key) {
         if (typeof item["Value"] !== "undefined") {

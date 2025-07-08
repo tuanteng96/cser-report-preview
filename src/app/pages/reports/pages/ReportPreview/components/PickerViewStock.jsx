@@ -76,6 +76,7 @@ const PickerViewStock = forwardRef((props, ref) => {
             : Stocks.map((x) => x.ID),
       };
       let { data } = await ReportsAPI.viewStock(newFilters);
+      
       return data?.result?.Items || [];
     },
     enabled: visible,
@@ -220,7 +221,7 @@ const PickerViewStock = forwardRef((props, ref) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [data]
   );
-
+  
   const onHide = () => {
     setVisible(false);
     onClose && onClose();
