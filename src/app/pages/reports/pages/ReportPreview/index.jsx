@@ -127,10 +127,10 @@ function ReportPreview(props) {
           Title: "Tần suất sử dụng",
           Href: hasRouter() + "/khach-hang/tan-suat-su-dung",
         },
-        {
-          Title: "Chuyển đổi",
-          Href: hasRouter() + "/khach-hang/chuyen-doi",
-        },
+        // {
+        //   Title: "Chuyển đổi",
+        //   Href: hasRouter() + "/khach-hang/chuyen-doi",
+        // },
       ],
     },
     {
