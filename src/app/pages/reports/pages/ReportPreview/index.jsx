@@ -376,6 +376,10 @@ function ReportPreview(props) {
           Title: "Báo cáo khoá học",
           Href: hasRouter() + "/khac/bao-cao-khoa-hoc",
         },
+        {
+          Title: 'Báo cáo thông tin',
+          Href: hasRouter() + '/khac/bao-cao-thong-tin-pos'
+        }
         // {
         //   Title: 'Lợi nhuận',
         //   Href: '/khac/loi-nhuan'
