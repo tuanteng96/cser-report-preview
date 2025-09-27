@@ -147,10 +147,7 @@ function ReportPreview(props) {
           Title: "Báo cáo nghiệp vụ",
           Href: hasRouter() + "/dich-vu/bao-cao-nghiep-vu",
         },
-        {
-          Title: "Dịch vụ điểm này, sử dụng điểm khác",
-          Href: hasRouter() + "/dich-vu/dv-diem-sd-diem-khac",
-        },
+
         {
           Title: "Tồn dịch vụ",
           Href: hasRouter() + "/dich-vu/ton-dich-vu",
@@ -158,6 +155,10 @@ function ReportPreview(props) {
         {
           Title: "Báo cáo đặt lịch",
           Href: hasRouter() + "/dich-vu/bao-cao-dat-lich",
+        },
+        {
+          Title: "Dịch vụ làm khác điểm",
+          Href: hasRouter() + "/dich-vu/dv-diem-sd-diem-khac",
         },
       ],
     },
@@ -377,9 +378,9 @@ function ReportPreview(props) {
           Href: hasRouter() + "/khac/bao-cao-khoa-hoc",
         },
         {
-          Title: 'Báo cáo thông tin',
-          Href: hasRouter() + '/khac/bao-cao-thong-tin-pos'
-        }
+          Title: "Báo cáo thông tin",
+          Href: hasRouter() + "/khac/bao-cao-thong-tin-pos",
+        },
         // {
         //   Title: 'Lợi nhuận',
         //   Href: '/khac/loi-nhuan'
@@ -389,7 +390,7 @@ function ReportPreview(props) {
   ]);
   const [IndexShow, setIndexShow] = useState("BAO_CAO_NGAY");
 
-  window.ReportMenus = MenuList
+  window.ReportMenus = MenuList;
 
   const textSpeechMutation = useMutation({
     mutationFn: async (body) => {
@@ -871,7 +872,9 @@ function ReportPreview(props) {
                   }
                 >
                   <div className="flex items-center text-xl font-semibold lg:text-2xl">
-                    <span className="hidden md:inline-block">Báo cáo tổng quan</span>
+                    <span className="hidden md:inline-block">
+                      Báo cáo tổng quan
+                    </span>
                     <span className="md:hidden">BC tổng quan</span>
                     <ChevronDownIcon className="w-5 ml-2" />
                   </div>

@@ -376,6 +376,10 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 .ezs-navbar > li:last-child {
   padding-right: 0;
 }
+.ezs-navbar > li:last-child .ezs-navbar__sub {
+  right: 0;
+  left: auto;
+}
 .ezs-navbar > li > a {
   text-decoration: none;
   padding: 0.65rem 1.1rem;
