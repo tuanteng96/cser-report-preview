@@ -269,6 +269,11 @@ function ReportPreview(props) {
           Title: "Bảng lương",
           Href: hasRouter() + "/nhan-vien/bang-luong",
         },
+        {
+          Title: 'Bảng lương 2',
+          Href: hasRouter() + '/nhan-vien/bang-luong-2',
+          hidden: !GlobalConfig?.Admin?.chinhsachluongchitiet
+        }
       ],
     },
     {
