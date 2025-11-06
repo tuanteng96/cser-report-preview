@@ -25,20 +25,20 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ReportContext } from "src/app/_ezs/contexts";
 import { formatString } from "src/app/_ezs/utils/formatString";
 import ConfigAPI from "src/app/_ezs/api/config.api";
-import axios from "axios";
 import clsx from "clsx";
 import { useWindowSize } from "src/app/_ezs/hooks/useWindowSize";
 import { NavLink } from "react-router-dom";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
-import Swal from "sweetalert2";
 import { toAbsoluteUrl } from "src/app/_ezs/utils/assetPath";
+import { formatArray } from "src/app/_ezs/utils/formatArray";
 
 const hasRouter = () => {
   return "/admin/?mdl20=R23&act20=index#rp:";
 };
 
 function ReportPreview(props) {
-  let { CrStocks, GlobalConfig, Stocks, accessToken } = useAuth();
+  let { CrStocks, GlobalConfig, Stocks, accessToken, Info } = useAuth();
+
   const queryClient = useQueryClient();
   const { width } = useWindowSize();
   const { report, bao_cao_ngay_tong_quan } = useRoles([
@@ -270,10 +270,10 @@ function ReportPreview(props) {
           Href: hasRouter() + "/nhan-vien/bang-luong",
         },
         {
-          Title: 'Bảng lương 2',
-          Href: hasRouter() + '/nhan-vien/bang-luong-2',
-          hidden: !GlobalConfig?.Admin?.chinhsachluongchitiet
-        }
+          Title: "Bảng lương 2",
+          Href: hasRouter() + "/nhan-vien/bang-luong-2",
+          hidden: !GlobalConfig?.Admin?.chinhsachluongchitiet,
+        },
       ],
     },
     {
@@ -988,6 +988,20 @@ function ReportPreview(props) {
                         (report?.hasRight && report?.IsStocks)
                       )
                     }
+                    minDate={formatArray.getDateLimit({
+                      Auth: {
+                        Info,
+                      },
+                      Action: "minDate",
+                      Type: "THEO_NGAY",
+                    })}
+                    maxDate={formatArray.getDateLimit({
+                      Auth: {
+                        Info,
+                      },
+                      Action: "maxDate",
+                      Type: "THEO_NGAY",
+                    })}
                   />
                 </div>
                 <SelectStocks

@@ -10,11 +10,12 @@ import { SelectStocks } from "src/app/_ezs/partials/select";
 import moment from "moment";
 import { useRoles } from "src/app/_ezs/hooks/useRoles";
 import { useAuth } from "src/app/_ezs/core/Auth";
+import { formatArray } from "src/app/_ezs/utils/formatArray";
 
 function PickerFilterReport({ children, data, onSubmits }) {
   const [visible, setVisible] = useState(false);
 
-  let { CrStocks } = useAuth();
+  let { CrStocks, Info } = useAuth();
   const { report, bao_cao_ngay_tong_quan } = useRoles([
     "bao_cao_ngay_tong_quan",
     "report",
@@ -106,6 +107,20 @@ function PickerFilterReport({ children, data, onSubmits }) {
                                     field.value ? new Date(field.value) : null
                                   }
                                   dateFormat="dd/MM/yyyy"
+                                  minDate={formatArray.getDateLimit({
+                                    Auth: {
+                                      Info,
+                                    },
+                                    Action: "minDate",
+                                    Type: "THEO_NGAY",
+                                  })}
+                                  maxDate={formatArray.getDateLimit({
+                                    Auth: {
+                                      Info,
+                                    },
+                                    Action: "maxDate",
+                                    Type: "THEO_NGAY",
+                                  })}
                                 />
                               )}
                             />

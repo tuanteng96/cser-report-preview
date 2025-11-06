@@ -23,9 +23,12 @@ import { formatArray } from "src/app/_ezs/utils/formatArray";
 import { Controller, useForm } from "react-hook-form";
 import { Button } from "src/app/_ezs/partials/button";
 import clsx from "clsx";
+import { useAuth } from "src/app/_ezs/core/Auth";
 
 const PickerViewStock = forwardRef((props, ref) => {
   let { children, onClose, ...rest } = props;
+
+  let { Info } = useAuth();
 
   let [visible, setVisible] = useState(false);
   let [Lists, setLists] = useState([]);
@@ -76,7 +79,7 @@ const PickerViewStock = forwardRef((props, ref) => {
             : Stocks.map((x) => x.ID),
       };
       let { data } = await ReportsAPI.viewStock(newFilters);
-      
+
       return data?.result?.Items || [];
     },
     enabled: visible,
@@ -221,7 +224,7 @@ const PickerViewStock = forwardRef((props, ref) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [data]
   );
-  
+
   const onHide = () => {
     setVisible(false);
     onClose && onClose();
@@ -306,6 +309,20 @@ const PickerViewStock = forwardRef((props, ref) => {
                                           : null
                                       }
                                       dateFormat="dd/MM/yyyy"
+                                      minDate={formatArray.getDateLimit({
+                                        Auth: {
+                                          Info,
+                                        },
+                                        Action: "minDate",
+                                        Type: "THEO_NGAY",
+                                      })}
+                                      maxDate={formatArray.getDateLimit({
+                                        Auth: {
+                                          Info,
+                                        },
+                                        Action: "maxDate",
+                                        Type: "THEO_NGAY",
+                                      })}
                                     />
                                   )}
                                 />
@@ -331,6 +348,20 @@ const PickerViewStock = forwardRef((props, ref) => {
                                           : null
                                       }
                                       dateFormat="dd/MM/yyyy"
+                                      minDate={formatArray.getDateLimit({
+                                        Auth: {
+                                          Info,
+                                        },
+                                        Action: "minDate",
+                                        Type: "THEO_NGAY",
+                                      })}
+                                      maxDate={formatArray.getDateLimit({
+                                        Auth: {
+                                          Info,
+                                        },
+                                        Action: "maxDate",
+                                        Type: "THEO_NGAY",
+                                      })}
                                     />
                                   )}
                                 />

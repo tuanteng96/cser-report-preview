@@ -14,6 +14,17 @@ if (import.meta.env.DEV) {
       ID: 1,
       FullName: "Admin System",
     },
+    Groups: [
+      {
+        Title: "11617.order",
+      },
+      {
+        Title: "Administrator",
+      },
+      // {
+      //   Title: "Báo cáo - 3",
+      // },
+    ],
     Stocks: [
       {
         Title: "Quản lý cơ sở",
@@ -27,7 +38,7 @@ if (import.meta.env.DEV) {
       },
       {
         Title: "Cser Hồ Chí Minh",
-        ID: 11557,
+        ID: 11617,
         ParentID: 778,
       },
     ],
@@ -57,7 +68,7 @@ if (import.meta.env.DEV) {
                           {
                             Title: "Cser Hồ Chí Minh",
                             ID: 11521,
-                            ParentID: 11557,
+                            ParentID: 11617,
                           },
                         ],
                         IsAllStock: false,
@@ -77,7 +88,7 @@ if (import.meta.env.DEV) {
                 },
                 {
                   Title: "Cser Hồ Chí Minh",
-                  ID: 11557,
+                  ID: 11617,
                 },
               ],
             },
@@ -85,9 +96,9 @@ if (import.meta.env.DEV) {
         },
       ],
     },
-    CrStockID: 11557,
+    CrStockID: 11617,
     token:
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBdXRoMlR5cGUiOiJVc2VyRW50IiwiSUQiOiIxIiwiVG9rZW5JZCI6IjE5ODExMjAzMTQiLCJuYmYiOjE3NTE5MDYxMzYsImV4cCI6MTgzODMwNjEzNiwiaWF0IjoxNzUxOTA2MTM2fQ.b97rfCw_Ba2cW31HBgQb6RGDVgEyI9mshvv7Xk9JbJo",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBdXRoMlR5cGUiOiJVc2VyRW50IiwiSUQiOiIxIiwiVG9rZW5JZCI6IjExMjg4MTE0NzIzMDAwMTMiLCJuYmYiOjE3NjI0MjM5MTcsImV4cCI6MTg0ODgyMzkxNywiaWF0IjoxNzYyNDIzOTE3fQ.m2tgANKaP1Akce7Upv83BanDdnf7q-YwOq_q7dxspIU",
   };
 }
 
@@ -115,6 +126,7 @@ const AuthProvider = ({ children }) => {
   const [Stocks, setStocks] = useState(null);
   const [RightTree, setRightTree] = useState(null);
   const [GlobalConfig, setGlobalConfig] = useState(null);
+  const [Info, setInfo] = useState(null);
 
   const saveAuth = ({ CrStockID, token, User, rightTree, ...values }) => {
     let newStocks = values.Stocks
@@ -129,7 +141,7 @@ const AuthProvider = ({ children }) => {
     setAccessToken(token);
     setStocks(newStocks);
     setRightTree(rightTree);
-
+    setInfo({ CrStockID, token, User, rightTree, ...values });
     if (index > -1) {
       setCrStocks(newStocks[index]);
     }
@@ -138,6 +150,7 @@ const AuthProvider = ({ children }) => {
   return (
     <AuthContext.Provider
       value={{
+        Info,
         auth,
         accessToken,
         CrStocks,
