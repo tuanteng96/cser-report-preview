@@ -5,6 +5,7 @@ import {
   Incomes,
   Members,
   PickerFilterReport,
+  PickerViewRating,
   PickerViewStock,
   Player,
   Sells,
@@ -906,6 +907,25 @@ function ReportPreview(props) {
                       </PickerViewStock>
                     )}
                   </MenuItem>
+                  {GlobalConfig?.Admin?.Feedbackpro && (
+                    <MenuItem>
+                      {({ close }) => (
+                        <PickerViewRating onClose={close}>
+                          {({ open }) => (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                open();
+                              }}
+                              className="flex items-center px-5 py-2.5 text-[15px] min-w-[200px] hover:bg-[#F4F6FA] hover:text-primary font-inter transition cursor-pointer font-medium text-site-color"
+                            >
+                              Theo đánh giá dịch vụ
+                            </button>
+                          )}
+                        </PickerViewRating>
+                      )}
+                    </MenuItem>
+                  )}
                 </MenuItems>
               </Menu>
 

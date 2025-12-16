@@ -10,12 +10,10 @@ import { SelectStocks } from "src/app/_ezs/partials/select";
 import moment from "moment";
 import { useRoles } from "src/app/_ezs/hooks/useRoles";
 import { useAuth } from "src/app/_ezs/core/Auth";
-import { formatArray } from "src/app/_ezs/utils/formatArray";
 
-function PickerFilterReport({ children, data, onSubmits }) {
+function PickerFilterRating({ children, onSubmits, filters }) {
   const [visible, setVisible] = useState(false);
 
-  let { CrStocks, Info } = useAuth();
   const { report, bao_cao_ngay_tong_quan } = useRoles([
     "bao_cao_ngay_tong_quan",
     "report",
@@ -25,19 +23,17 @@ function PickerFilterReport({ children, data, onSubmits }) {
     setVisible(false);
   };
 
-  const { control, handleSubmit, reset } = useForm({
+  const { control, handleSubmit, reset, watch } = useForm({
     defaultValues: {
-      Type: "",
-      StockID: CrStocks?.ID ? [CrStocks?.ID] : null,
-      CrDate: moment().toDate(),
+      ...filters,
     },
   });
-
+  
   useEffect(() => {
-    if (visible && data) {
-      reset(data);
+    if (visible && filters) {
+      reset(filters);
     }
-  }, [data, visible]);
+  }, [filters, visible]);
 
   const onSubmit = (values) => {
     onSubmits(values);
@@ -67,7 +63,7 @@ function PickerFilterReport({ children, data, onSubmits }) {
                   autoComplete="off"
                 >
                   <m.div
-                    className="absolute flex flex-col justify-center h-full py-10 max-w-[500px] w-full px-5 md:px-0"
+                    className="absolute flex flex-col justify-center h-full py-10 max-w-[400px] w-full px-5 md:px-0"
                     initial={{ opacity: 0, top: "60%" }}
                     animate={{ opacity: 1, top: "auto" }}
                     exit={{ opacity: 0, top: "60%" }}
@@ -89,10 +85,10 @@ function PickerFilterReport({ children, data, onSubmits }) {
                       </Dialog.Title>
                       <div className="p-5 overflow-auto grow">
                         <div className="mb-3.5">
-                          <div className="font-light">Ngày</div>
+                          <div className="font-light">Từ ngày</div>
                           <div className="mt-1">
                             <Controller
-                              name="CrDate"
+                              name="DateStart"
                               control={control}
                               render={({
                                 field: { ref, ...field },
@@ -107,20 +103,30 @@ function PickerFilterReport({ children, data, onSubmits }) {
                                     field.value ? new Date(field.value) : null
                                   }
                                   dateFormat="dd/MM/yyyy"
-                                  minDate={formatArray.getDateLimit({
-                                    Auth: {
-                                      Info,
-                                    },
-                                    Action: "minDate",
-                                    Type: "THEO_NGAY",
-                                  })}
-                                  maxDate={formatArray.getDateLimit({
-                                    Auth: {
-                                      Info,
-                                    },
-                                    Action: "maxDate",
-                                    Type: "THEO_NGAY",
-                                  })}
+                                />
+                              )}
+                            />
+                          </div>
+                        </div>
+                        <div className="mb-3.5">
+                          <div className="font-light">Từ ngày</div>
+                          <div className="mt-1">
+                            <Controller
+                              name="DateEnd"
+                              control={control}
+                              render={({
+                                field: { ref, ...field },
+                                fieldState,
+                              }) => (
+                                <InputDatePicker
+                                  //popperPlacement='top-start'
+                                  placeholderText="Đến ngày"
+                                  autoComplete="off"
+                                  onChange={field.onChange}
+                                  selected={
+                                    field.value ? new Date(field.value) : null
+                                  }
+                                  dateFormat="dd/MM/yyyy"
                                 />
                               )}
                             />
@@ -137,14 +143,11 @@ function PickerFilterReport({ children, data, onSubmits }) {
                                 fieldState,
                               }) => (
                                 <SelectStocks
-                                  isMulti
                                   isClearable={true}
                                   className="select-control"
-                                  value={field.value}
+                                  value={field.value?.value || null}
                                   onChange={(val) => {
-                                    field.onChange(
-                                      val ? val.map((x) => x.value) : []
-                                    );
+                                    field.onChange(val);
                                   }}
                                   StockRoles={
                                     bao_cao_ngay_tong_quan?.hasRight
@@ -184,4 +187,4 @@ function PickerFilterReport({ children, data, onSubmits }) {
   );
 }
 
-export default PickerFilterReport;
+export default PickerFilterRating;

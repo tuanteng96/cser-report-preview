@@ -25,6 +25,8 @@ const ReportsAPI = {
       `/api/v3/r23/hang-ngay/tien-vi-datlich-dichvu`,
       JSON.stringify(body)
     ),
+  viewRatingOverview: (body) => http.post(`/api/v3/r23/dich-vu/danh-sach`, JSON.stringify(body)),
+  viewRating: (body) => http.post(`/api/v4/feedback@get`, JSON.stringify(body)),
 };
 
 export default ReportsAPI;

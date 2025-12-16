@@ -16,7 +16,7 @@ if (import.meta.env.DEV) {
     },
     Groups: [
       {
-        Title: "11617.order",
+        Title: "11620.order",
       },
       {
         Title: "Administrator",
@@ -38,7 +38,7 @@ if (import.meta.env.DEV) {
       },
       {
         Title: "Cser Hồ Chí Minh",
-        ID: 11617,
+        ID: 11620,
         ParentID: 778,
       },
     ],
@@ -68,7 +68,7 @@ if (import.meta.env.DEV) {
                           {
                             Title: "Cser Hồ Chí Minh",
                             ID: 11521,
-                            ParentID: 11617,
+                            ParentID: 11620,
                           },
                         ],
                         IsAllStock: false,
@@ -88,7 +88,7 @@ if (import.meta.env.DEV) {
                 },
                 {
                   Title: "Cser Hồ Chí Minh",
-                  ID: 11617,
+                  ID: 11620,
                 },
               ],
             },
@@ -96,9 +96,9 @@ if (import.meta.env.DEV) {
         },
       ],
     },
-    CrStockID: 11617,
+    CrStockID: 11620,
     token:
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBdXRoMlR5cGUiOiJVc2VyRW50IiwiSUQiOiIxIiwiVG9rZW5JZCI6IjExMjg4MTE0NzIzMDAwMTMiLCJuYmYiOjE3NjI0MjM5MTcsImV4cCI6MTg0ODgyMzkxNywiaWF0IjoxNzYyNDIzOTE3fQ.m2tgANKaP1Akce7Upv83BanDdnf7q-YwOq_q7dxspIU",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBdXRoMlR5cGUiOiJVc2VyRW50IiwiSUQiOiIxIiwiVG9rZW5JZCI6IjExMjQ2MTAxMDE5MDAwMDEiLCJuYmYiOjE3NjU3OTEwNDUsImV4cCI6MTg1MjE5MTA0NSwiaWF0IjoxNzY1NzkxMDQ1fQ.xVSOj6gpSsQd9eus3YBMw20fGpLLmb-LI4ZhO9asEYM",
   };
 }
 
