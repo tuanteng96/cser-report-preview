@@ -53,8 +53,8 @@ function ReportPreview(props) {
       report?.IsStocks || bao_cao_ngay_tong_quan?.IsStocks
         ? null
         : CrStocks?.ID
-        ? [CrStocks?.ID]
-        : null,
+          ? [CrStocks?.ID]
+          : null,
     CrDate: moment().toDate(),
     // DateStart: moment().clone().startOf("week").toDate(), //"30/07/2024"
     // DateEnd: moment().clone().endOf("week").toDate(), //"31/07/2024"
@@ -279,12 +279,19 @@ function ReportPreview(props) {
         {
           Title: "Bảng lương",
           Href: hasRouter() + "/nhan-vien/bang-luong",
-          hidden: GlobalConfig?.Admin?.chinhsachluongchitiet,
+          hidden:
+            GlobalConfig?.Admin?.chinhsachluongchitiet ||
+            GlobalConfig?.Admin?.queen_chinhsachluongchitiet,
         },
         {
           Title: "Bảng lương 2",
           Href: hasRouter() + "/nhan-vien/bang-luong-2",
           hidden: !GlobalConfig?.Admin?.chinhsachluongchitiet,
+        },
+        {
+          Title: "Bảng lương Queen",
+          Href: hasRouter() + "/nhan-vien/bang-luong-2",
+          hidden: !GlobalConfig?.Admin?.queen_chinhsachluongchitiet,
         },
       ],
     },
@@ -474,7 +481,7 @@ function ReportPreview(props) {
     ) {
       const sum = Store.SellsChart?.TOTAL?.series.reduce(
         (partialSum, a) => partialSum + a,
-        0
+        0,
       );
       for (let [i, value] of Store.SellsChart?.TOTAL?.series.entries()) {
         SalesRate[i] = Math.round((value / sum) * 100);
@@ -508,7 +515,7 @@ function ReportPreview(props) {
     text += `Về doanh thu. ${
       SumKey(["DON_HANG_MOI"]) > 0
         ? `Bán mới Đạt [DON_HANG_MOI] đồng, chi phí giảm giá [GIAM_GIA] đồng, khách thanh toán thực tế là [THANH_TOAN_TM_CK_QT] đồng, thanh toán ${SumKey(
-            ["THANH_TOAN_VI", "THANH_TOAN_THE_TIEN"]
+            ["THANH_TOAN_VI", "THANH_TOAN_THE_TIEN"],
           )} đồng đến từ ví và thẻ tiền, còn nợ lại [CON_NO_LAI] đồng`
         : "Không phát sinh doanh thu bán mới"
     }. ${
@@ -521,7 +528,7 @@ function ReportPreview(props) {
     }% sản phẩm, ${
       SalesRate[2]
     }% thẻ tiền. Top 5 sản phẩm, dịch vụ chiếm doanh thu cao nhất gồm ${SalesTop.map(
-      (x) => x.ProdTitle
+      (x) => x.ProdTitle,
     ).join(", ")}. `;
     text += `Về đặt lịch & dịch vụ. ${
       SumKey(["DAT_LICH"]) > 0
@@ -614,7 +621,7 @@ function ReportPreview(props) {
                 });
               }
             },
-          }
+          },
         );
       }
       if (GlobalConfig?.Admin?.TextToSpeech.toUpperCase() === "ZALO") {
@@ -647,7 +654,7 @@ function ReportPreview(props) {
                 });
               }
             },
-          }
+          },
         );
       }
     }
@@ -694,7 +701,7 @@ function ReportPreview(props) {
                 MenuList.map((item, index) => (
                   <li
                     className={clsx(
-                      IndexShow === item.TitleKey && "menu-item-open"
+                      IndexShow === item.TitleKey && "menu-item-open",
                     )}
                     key={index}
                   >
@@ -790,7 +797,7 @@ function ReportPreview(props) {
                           className={clsx(
                             item.Href ===
                               "/admin/?mdl20=R23&act20=index#rp:/bao-cao-ngay" &&
-                              "active"
+                              "active",
                           )}
                           to={sub.Href}
                         >
@@ -805,7 +812,7 @@ function ReportPreview(props) {
                           className={clsx(
                             item.Href ===
                               "/admin/?mdl20=R23&act20=index#rp:/bao-cao-ngay" &&
-                              "active"
+                              "active",
                           )}
                           href="#"
                           onClick={() =>
@@ -835,7 +842,7 @@ function ReportPreview(props) {
                                         className={clsx(
                                           sub.Href ===
                                             "/admin/?mdl20=R23&act20=index#rp:/bao-cao-ngay/tong-quan" &&
-                                            "active"
+                                            "active",
                                         )}
                                         to={
                                           sub.Href ===
@@ -852,7 +859,7 @@ function ReportPreview(props) {
                                         className={clsx(
                                           sub.Href ===
                                             "/admin/?mdl20=R23&act20=index#rp:/bao-cao-ngay/tong-quan" &&
-                                            "active"
+                                            "active",
                                         )}
                                         onClick={() =>
                                           (window.top.location.href =
@@ -866,7 +873,7 @@ function ReportPreview(props) {
                                       </a>
                                     )}
                                   </li>
-                                )
+                                ),
                               )}
                             </ul>
                           </div>
@@ -962,7 +969,7 @@ function ReportPreview(props) {
                         Store.isLoadingSellsChart ||
                         textSpeechMutation?.isPending
                         ? "is-loading"
-                        : "not-loading"
+                        : "not-loading",
                     )}
                     onClick={() => TextToSpeech()}
                   >
@@ -1090,7 +1097,7 @@ function ReportPreview(props) {
                         Store.isLoadingSellsChart ||
                         textSpeechMutation?.isPending
                         ? "is-loading"
-                        : "not-loading"
+                        : "not-loading",
                     )}
                     onClick={() => TextToSpeech()}
                   >
