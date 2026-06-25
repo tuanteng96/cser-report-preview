@@ -290,7 +290,7 @@ function ReportPreview(props) {
         },
         {
           Title: "Bảng lương Queen",
-          Href: hasRouter() + "/nhan-vien/bang-luong-2",
+          Href: hasRouter() + "/nhan-vien/bang-luong-3",
           hidden: !GlobalConfig?.Admin?.queen_chinhsachluongchitiet,
         },
       ],
