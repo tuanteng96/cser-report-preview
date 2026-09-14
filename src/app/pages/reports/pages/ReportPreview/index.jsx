@@ -184,6 +184,11 @@ function ReportPreview(props) {
           hidden: !GlobalConfig?.Admin?.chuyennhuong_khacdiem,
         },
         {
+          Title: "Dịch vụ xuất hoá đơn",
+          Href: hasRouter() + "/ban-hang/dich-vu-xuat-hoa-don",
+          hidden: !GlobalConfig?.Admin?.chuyennhuong_khacdiem,
+        },
+        {
           Title: "Doanh số mới",
           Href: hasRouter() + "/ban-hang/ds-bc-2",
           hidden: !GlobalConfig?.Admin?.bao_cao_mely,
