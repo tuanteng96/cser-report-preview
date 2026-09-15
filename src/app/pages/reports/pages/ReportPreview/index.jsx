@@ -161,6 +161,10 @@ function ReportPreview(props) {
           Title: "Dịch vụ làm khác điểm",
           Href: hasRouter() + "/dich-vu/dv-diem-sd-diem-khac",
         },
+        {
+          Title: "Dịch vụ chưa upload ảnh",
+          Href: hasRouter() + "/dich-vu/dich-vu-chua-upload-anh",
+        },
       ],
     },
     {
